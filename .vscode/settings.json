@@ -1,0 +1,4 @@
+{
+  "autoimport.filesToScan": "./src/**/*.ts",
+  "eslint.format.enable": true
+}
