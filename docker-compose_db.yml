@@ -2,13 +2,12 @@ version: '3.1'
 
 services:
   db:
-    image: postgres:11.2
+    image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - ./db/data:/var/lib/postgresql/data
-      - ./db/config/postgresql.conf:/etc/postgresql/postgresql.conf
+      - pg_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
   adminer:
@@ -16,3 +15,7 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+volumes:
+  pg_data:
+    driver: local
