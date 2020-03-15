@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import ormConfig from '../ormconfig';
 
-import UsersModule from './users/module';
+import UsersModule from './users/users.module';
 
 
 import AppController from './app.controller';
