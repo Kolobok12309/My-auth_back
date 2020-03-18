@@ -1,17 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, Index } from 'typeorm';
 
-export const enum Roles {
-  Root,
-  Admin,
-  Editor,
-  User,
-}
+import { Roles } from './user.dto';
 
 @Entity('users')
 export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index({ unique: true })
   @Column({ unique: true, update: false })
   username: string;
 

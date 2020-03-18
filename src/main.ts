@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
+import { ValidationPipe } from '@nestjs/common';
+
 import AppModule from './app.module';
 
 declare const module: any;
@@ -9,6 +11,7 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // Documentation by swagger
   const options = new DocumentBuilder()
     .setTitle('MyAuth system')
     .setDescription('The auth API description')
@@ -16,6 +19,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('doc', app, document);
+
+  // Global validation by class-validator
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3000);
 
