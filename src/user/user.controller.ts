@@ -1,8 +1,8 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
-import { SignInUserDto, RegisterUserDto } from './user.dto';
+import { SignInUserDto, RegisterUserDto, CreateUserDto, UpdateAdminUserDto, UpdateUserDto } from './user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -10,15 +10,30 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signIn')
-  async signIn(@Body() signInUserDto: SignInUserDto) {
-
-  }
+  async signIn(@Body() signInUserDto: SignInUserDto) {}
 
   @Post('signUp')
   async signUp(@Body() signUpUserDto: RegisterUserDto) {
-    console.log(signUpUserDto);
     return this.userService.register(signUpUserDto);
   }
+
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {}
+
+  @Get(':id')
+  async getUser(@Param('id') id: number) {}
+
+  @Put(':id')
+  async updateUser(@Param('id') id: number, @Body() updateAdminUserDto: UpdateAdminUserDto) {}
+
+  @Put()
+  async updateSelfUser(@Body() updateUserDto: UpdateUserDto) { }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: number) {}
+
+  @Delete()
+  async deleteSelf() {}
 
   @Get()
   getAll() {

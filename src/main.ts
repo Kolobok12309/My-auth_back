@@ -21,7 +21,9 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
 
   // Global validation by class-validator
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true
+  }));
 
   await app.listen(3000);
 

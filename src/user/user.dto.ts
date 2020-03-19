@@ -85,18 +85,6 @@ export class UpdateAdminUserDto implements UserInterface {
   role: Roles;
 }
 
-export class DeleteUserDto implements UserInterface {
-  @IsNumber()
-  @Min(0)
-  id: number;
-}
-
-export class GetUserDto implements UserInterface {
-  @IsNumber()
-  @Min(0)
-  id: number;
-}
-
 export class FindUserByUsernameDto implements UserInterface {
   @IsString()
   @Length(5)
