@@ -3,7 +3,7 @@ const process = require('process');
 const username = process.env.POSTGRES_USER || 'postgres';
 const password = process.env.POSTGRES_PASSWORD || 'example';
 
-module.exports = {
+const mainConfig = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
@@ -13,12 +13,26 @@ module.exports = {
   synchronize: true,
   dropSchema: false,
   logging: true,
-  entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/migrations/**/*.js'],
-  subscribers: ['dist/subscriber/**/*.js'],
-  cli: {
-    entitiesDir: 'entity',
-    migrationsDir: 'migrations',
-    subscribersDir: 'subscriber',
-  },
+  entities: ['src/**/*.entity.ts', 'entity/*.ts'],
+  subscribers: ['subscriber/**/*.ts'],
 };
+
+module.exports = [
+  {
+    ...mainConfig,
+    migrations: ['migrations/**/*.ts'],
+    cli: {
+      entitiesDir: 'entity',
+      migrationsDir: 'migrations',
+      subscribersDir: 'subscriber',
+    },
+  },
+  {
+    ...mainConfig,
+    name: 'seed',
+    migrations: ['seeds/*.ts'],
+    cli: {
+      migrationsDir: 'seeds',
+    },
+  },
+];
