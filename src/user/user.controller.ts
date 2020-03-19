@@ -1,8 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
-import { SignInUserDto } from './user.dto';
+import { SignInUserDto, RegisterUserDto } from './user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -12,5 +12,16 @@ export class UserController {
   @Post('signIn')
   async signIn(@Body() signInUserDto: SignInUserDto) {
 
+  }
+
+  @Post('signUp')
+  async signUp(@Body() signUpUserDto: RegisterUserDto) {
+    console.log(signUpUserDto);
+    return this.userService.register(signUpUserDto);
+  }
+
+  @Get()
+  getAll() {
+    return this.userService.findAll();
   }
 }

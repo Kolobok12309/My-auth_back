@@ -1,9 +1,24 @@
+const path = require('path');
+
 module.exports = {
   root: true,
+  env: {
+    node: true,
+  },
   extends: ['airbnb-typescript/base', 'prettier'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
+    tsconfigRootDir: '.',
   },
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
+  plugins: ['@typescript-eslint'],
   rules: {
     'import/order': [
       'error',
@@ -23,5 +38,6 @@ module.exports = {
     'class-methods-use-this': 0,
     'import/prefer-default-export': 0,
     'max-classes-per-file': 0,
+    'no-console': 0,
   },
 };
