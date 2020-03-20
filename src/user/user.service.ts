@@ -1,10 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { promisify } from 'util';
+
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash, compare } from 'bcrypt';
 
 import { Repository } from 'typeorm';
 
 import User from './user.entity';
-import { RegisterUserDto } from './user.dto';
+import { RegisterUserDto, SignInUserDto } from './user.dto';
+
+import { SALT_ROUNDS } from './user.consts';
+
+const asyncHash = promisify(hash);
+const asyncCompare = promisify(compare);
 
 @Injectable()
 export class UserService {
@@ -17,11 +25,25 @@ export class UserService {
     return this.userRepo.find();
   }
 
-  async register(user: RegisterUserDto): Promise<any> {
+  async signIn({ username, password }: SignInUserDto): Promise<User> {
+    const findedUser = await this.userRepo.findOne({ username });
+
+    const isPassRight = await asyncCompare(password, findedUser.password);
+
+    if (isPassRight) return findedUser;
+    throw new ForbiddenException('Неправильный логин или пароль');
+  }
+
+  async register({ username, password }: RegisterUserDto): Promise<User> {
+    const hashedPass = await asyncHash(password, SALT_ROUNDS);
+
+    const user = {
+      password: hashedPass,
+      username,
+    };
+
     const { generatedMaps } = await this.userRepo.insert(user);
 
-    const result = this.userRepo.merge(new User(), user, generatedMaps[0]);
-
-    return result;
+    return this.userRepo.merge(new User(), user, generatedMaps[0]);
   }
 }
