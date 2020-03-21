@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { SALT_ROUNDS } from './user.consts';
 import { User } from './entities';
 import { ICreateUser, Roles } from './interfaces';
+import { UserDto } from './dto';
 
 const asyncHash = promisify(hash);
 
@@ -16,29 +17,42 @@ const asyncHash = promisify(hash);
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepo: Repository<User>
-  ) { }
+    private readonly userRepo: Repository<User>,
+  ) {}
 
-  findAll(): Promise<User[]> {
-    return this.userRepo.find();
+  findAll(page: number = 1, perPage: number = 20): Promise<UserDto[]> {
+    return this.userRepo.find({
+      take: perPage,
+      skip: perPage * (page - 1),
+    });
+  }
+
+  async findById(id: number): Promise<UserDto> {
+    return this.userRepo.findOne(id);
   }
 
   async findByLogin(username: string): Promise<User> {
-    return this.userRepo.findOne({ username });
+    return this.userRepo.findOne({
+      where: {
+        username,
+      },
+      select: ['password', 'username', 'role', 'id', 'createdAt'],
+    });
   }
 
-  async create({ username, password, role = Roles.User }: ICreateUser): Promise<User> {
+  async create({ username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
-    const user: ICreateUser = {
+
+    const { generatedMaps } = await this.userRepo.insert({
       username,
       role,
       password: hashedPass,
-    };
+    });
 
-    const { generatedMaps } = await this.userRepo.insert(user);
-
-    const result = this.userRepo.merge(new User(), user, generatedMaps[0]);
-
-    return result;
+    return {
+      username,
+      role,
+      ...generatedMaps[0],
+    } as UserDto;
   }
 }

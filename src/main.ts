@@ -34,11 +34,6 @@ async function bootstrap() {
   await app.listen(PORT);
 
   if (module.hot) {
-    const connection = getConnection();
-    if (connection.isConnected) {
-      await connection.close();
-    }
-
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
