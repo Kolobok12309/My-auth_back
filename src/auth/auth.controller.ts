@@ -3,17 +3,16 @@ import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs
 
 import { UserDto } from '@/user/dto';
 
-import { AuthGuard } from '@nestjs/passport';
-
 import { AuthService } from './auth.service';
 
 import { SignUpDto } from './dto';
+import { JwtRefreshGuard, JwtAuthGuard, LocalGuard } from './guards';
 @ApiTags('Authorization')
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalGuard)
   @Post('signIn')
   @ApiResponse({ status: 201, description: 'User logged in' })
   async signIn(@Request() req) {
@@ -26,13 +25,13 @@ export class AuthController {
     return this.authService.signUp(registerAuthDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Post('signOut')
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'User logged out' })
   async logout() {}
 
-  @UseGuards(AuthGuard(['jwt', 'jwt_refresh', 'jwt_cookie']))
+  @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   @ApiCreatedResponse({ description: 'Pair of updated tokens' })
   async refreshToken(@Request() req) {
