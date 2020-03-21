@@ -1,5 +1,5 @@
 import { Controller, Body, Post } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 import { User } from '@/user/entities';
 
@@ -10,7 +10,7 @@ import { SignInDto, SignUpDto } from './dto';
 @ApiTags('Authorization')
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('signIn')
   @ApiResponse({ status: 201, description: 'User logged in' })
@@ -25,8 +25,7 @@ export class AuthController {
   }
 
   @Post('signOut')
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'User logged out' })
-  async logout() {
-
-  }
+  async logout() {}
 }

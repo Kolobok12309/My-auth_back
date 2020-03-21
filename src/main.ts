@@ -19,14 +19,17 @@ async function bootstrap() {
     .setTitle('MyAuth system')
     .setDescription('The auth API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/api', app, document);
 
   // Global validation by class-validator
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   await app.listen(PORT);
 
