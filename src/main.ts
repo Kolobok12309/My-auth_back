@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { getConnection } from 'typeorm';
+import * as cookieParser from 'cookie-parser';
 
 import { ValidationPipe } from '@nestjs/common';
 
@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.use(cookieParser());
 
   // Documentation by swagger
   const options = new DocumentBuilder()

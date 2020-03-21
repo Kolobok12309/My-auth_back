@@ -1,8 +1,11 @@
 import { promisify } from 'util';
 
+import { JwtService } from '@nestjs/jwt';
+
 import { compare } from 'bcrypt';
 
 import { Injectable, ForbiddenException } from '@nestjs/common';
+
 import { UserService } from '@/user/user.service';
 import { UserDto } from '@/user/dto';
 
@@ -12,7 +15,10 @@ const asyncCompare = promisify(compare);
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async validateUser({
     username,
@@ -35,12 +41,18 @@ export class AuthService {
     }
   }
 
-  async signIn({ username, password }: ISignIn): Promise<UserDto | null> {
-    const user = await this.validateUser({ username, password });
+  async signIn(user: UserDto) {
+    const payload = { username: user.username, sub: user.id };
 
-    if (!user) throw new ForbiddenException('Неправильный логин или пароль');
+    const access_token = this.jwtService.sign({ ...payload, type: 'access' });
+    const refresh_token = this.jwtService.sign({ ...payload, type: 'refresh' }, { expiresIn: '7d' });
+    const cookie_token = this.jwtService.sign({ ...payload, type: 'cookie' });
 
-    return user;
+    return {
+      access_token,
+      refresh_token,
+      cookie_token,
+    };
   }
 
   async signUp({ username, password }: ISignUp): Promise<UserDto> {
