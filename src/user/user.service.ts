@@ -1,18 +1,16 @@
 import { promisify } from 'util';
 
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { hash } from 'bcrypt';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { hash, compare } from 'bcrypt';
 
 import { Repository } from 'typeorm';
 
-import User from './user.entity';
-import { RegisterUserDto, SignInUserDto } from './user.dto';
-
 import { SALT_ROUNDS } from './user.consts';
+import { User } from './entities';
+import { ICreateUser, Roles } from './interfaces';
 
 const asyncHash = promisify(hash);
-const asyncCompare = promisify(compare);
 
 @Injectable()
 export class UserService {
@@ -25,25 +23,22 @@ export class UserService {
     return this.userRepo.find();
   }
 
-  async signIn({ username, password }: SignInUserDto): Promise<User> {
-    const findedUser = await this.userRepo.findOne({ username });
-
-    const isPassRight = await asyncCompare(password, findedUser.password);
-
-    if (isPassRight) return findedUser;
-    throw new ForbiddenException('Неправильный логин или пароль');
+  async findByLogin(username: string): Promise<User> {
+    return this.userRepo.findOne({ username });
   }
 
-  async register({ username, password }: RegisterUserDto): Promise<User> {
+  async create({ username, password, role = Roles.User }: ICreateUser): Promise<User> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
-
-    const user = {
-      password: hashedPass,
+    const user: ICreateUser = {
       username,
+      role,
+      password: hashedPass,
     };
 
     const { generatedMaps } = await this.userRepo.insert(user);
 
-    return this.userRepo.merge(new User(), user, generatedMaps[0]);
+    const result = this.userRepo.merge(new User(), user, generatedMaps[0]);
+
+    return result;
   }
 }
