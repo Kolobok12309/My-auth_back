@@ -1,0 +1,13 @@
+node_modules
+.vscode
+actions
+coverage
+dist
+.editorconfig
+.env
+.eslint
+.git
+coverage
+docker-compose*
+.prettier
+README

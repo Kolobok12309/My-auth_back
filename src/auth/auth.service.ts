@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { compare } from 'bcrypt';
 
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { UserService } from '@/user/user.service';
 import { UserDto } from '@/user/dto';

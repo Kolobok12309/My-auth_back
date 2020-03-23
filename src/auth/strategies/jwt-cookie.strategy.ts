@@ -14,7 +14,7 @@ export class JwtCookieStrategy extends PassportStrategy(Strategy, 'jwt_cookie') 
     super({
       jwtFromRequest: jwtFromCookieExtractor('jwt'),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      secretOrKey: configService.get<string>('JWT_SECRET') || 'secret',
     });
   }
 

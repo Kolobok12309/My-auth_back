@@ -10,6 +10,17 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  app:
+    image: kolobok12309/my-auth_back
+    environment:
+      DB_HOST: db
+      HOST: 0.0.0.0
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
   adminer:
     image: adminer
     restart: always

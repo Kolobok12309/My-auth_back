@@ -10,6 +10,7 @@ import AppModule from './app.module';
 declare const module: any;
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,7 +33,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(PORT);
+  await app.listen(PORT, HOST, () =>
+    console.log(`Start Nest Application on ${HOST}:${PORT}`));
 
   if (module.hot) {
     module.hot.accept();

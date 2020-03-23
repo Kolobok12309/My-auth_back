@@ -1,16 +1,20 @@
 const process = require('process');
 
-const username = process.env.POSTGRES_USER || 'postgres';
-const password = process.env.POSTGRES_PASSWORD || 'example';
+const host = process.env.DB_HOST || 'localhost';
+const port = process.env.DB_PORT || 5432;
+const username = process.env.DB_USER || 'postgres';
+const password = process.env.DB_PASS || 'example';
+const database = process.env.DB_NAME || 'postgres';
+const synchronize = process.env.NODE_ENV !== 'production';
 
 const mainConfig = {
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
+  host,
+  port,
   username,
   password,
-  database: 'postgres',
-  synchronize: true,
+  database,
+  synchronize,
   dropSchema: false,
   logging: true,
   entities: ['src/**/*.entity.ts', 'entity/*.ts'],
