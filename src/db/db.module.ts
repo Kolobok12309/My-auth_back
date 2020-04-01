@@ -14,6 +14,7 @@ export default TypeOrmModule.forRootAsync({
     dropSchema: false,
     logging: true,
     autoLoadEntities: true,
+    keepConnectionAlive: true,
   }),
   inject: [ConfigService]
 });

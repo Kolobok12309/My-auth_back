@@ -1,7 +1,9 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiQuery, ApiParam, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 
-import JwtAuthGuard from '@/auth/guards';
+import { Auth, User } from '@/auth/decorators';
+
+import { ITokenUser } from '@/auth/interfaces';
 
 import { UserService } from './user.service';
 import {
@@ -9,6 +11,7 @@ import {
   GetUserParamsDto,
   UserDto
 } from './dto';
+import { Roles } from './interfaces';
 
 
 @ApiTags('User')
@@ -16,14 +19,15 @@ import {
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
-  @ApiBearerAuth()
+  @Auth([Roles.Admin, Roles.Root])
   @ApiCreatedResponse({ description: 'User created', type: UserDto })
-  async createUser(@Body() createUserDto: CreateUserDto) {}
+  async createUser(@Body() createUserDto: CreateUserDto, @User() user: ITokenUser) {
+    return user;
+  }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @Auth([Roles.User])
   @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
   async getUser(@Param() { id }: GetUserParamsDto) {
     return this.userService.findById(id);

@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { SALT_ROUNDS } from './user.consts';
-import { User } from './entities';
+import { UserEntity } from './entities';
 import { ICreateUser, Roles } from './interfaces';
 import { UserDto } from './dto';
 
@@ -16,8 +16,8 @@ const asyncHash = promisify(hash);
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
   ) {}
 
   findAll(page: number = 1, perPage: number = 20): Promise<UserDto[]> {
@@ -31,7 +31,7 @@ export class UserService {
     return this.userRepo.findOne(id);
   }
 
-  async findByLogin(username: string): Promise<User> {
+  async findByLogin(username: string): Promise<UserEntity> {
     return this.userRepo.findOne({
       where: {
         username,

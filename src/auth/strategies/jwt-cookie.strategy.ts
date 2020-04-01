@@ -5,6 +5,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { Request } from 'express';
 
+import { ITokenPayload, ITokenUser } from '../interfaces';
+
 const jwtFromCookieExtractor = (cookieName = 'jwt') => (req: Request) =>
   (req && req.cookies && req.cookies[cookieName]) || null;
 
@@ -18,9 +20,9 @@ export class JwtCookieStrategy extends PassportStrategy(Strategy, 'jwt_cookie') 
     });
   }
 
-  async validate({ username, sub, type }: any) {
+  async validate({ sub, type, ...other }: ITokenPayload): Promise<ITokenUser> {
     if (type !== 'cookie') throw new UnauthorizedException();
 
-    return { id: sub, username, type };
+    return { id: sub, ...other };
   }
 }

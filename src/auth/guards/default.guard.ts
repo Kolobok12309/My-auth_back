@@ -11,6 +11,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { JwtGuard } from './jwt.guard';
 
+const MixinGuard = AuthGuard(['jwt_cookie', 'jwt']);
+
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
@@ -27,7 +29,7 @@ export class JwtAuthGuard implements CanActivate {
 
     switch (method) {
       case RequestMethod.GET:
-        authGuard = new (AuthGuard(['jwt_cookie', 'jwt']));
+        authGuard = new MixinGuard();
         break;
       default:
         authGuard = new JwtGuard();
