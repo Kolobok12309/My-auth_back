@@ -41,11 +41,12 @@ export class AuthService {
     }
   }
 
-  async signIn(user: ITokenUser) {
-    const payload = { username: user.username, sub: user.id, role: user.role };
+  async getTokensForUser(user: ITokenUser) {
+    const { username, id, role } = user;
+    const payload = { username, id, role };
 
     const accessToken = this.jwtService.sign({ ...payload, type: 'access' });
-    const refreshToken = this.jwtService.sign({ sub: user.id, type: 'refresh' }, { expiresIn: '7d' });
+    const refreshToken = this.jwtService.sign({ id, type: 'refresh' }, { expiresIn: '7d' });
     const cookieToken = this.jwtService.sign({ ...payload, type: 'cookie' });
 
     return {
@@ -54,8 +55,6 @@ export class AuthService {
       cookieToken,
     };
   }
-
-
 
   async signUp({ username, password }: ISignUp): Promise<UserDto> {
     return this.userService.create({ username, password });

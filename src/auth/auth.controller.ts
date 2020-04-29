@@ -1,9 +1,11 @@
-import { Controller, Body, Post, UseGuards, Res } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards, Res, UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Response } from 'express';
 
 import { UserDto } from '@/user/dto';
+
+import { UserService } from '@/user/user.service';
 
 import { AuthService } from './auth.service';
 
@@ -23,7 +25,10 @@ const cookieOptions =  {
 @ApiTags('Authorization')
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @UseGuards(LocalGuard)
   @Post('signIn')
@@ -33,7 +38,7 @@ export class AuthController {
       cookieToken,
       accessToken,
       refreshToken
-    } = await this.authService.signIn(user);
+    } = await this.authService.getTokensForUser(user);
 
     res.cookie('jwt', cookieToken, cookieOptions);
 
@@ -58,7 +63,22 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   @ApiCreatedResponse({ description: 'Pair of updated tokens' })
-  async refreshToken(@User() user: ITokenUser) {
-    return user;
+  async refreshToken(@Res() res: Response, @User() user: ITokenUser) {
+    const userFromDb = await this.userService.findById(user.id);
+
+    if (!userFromDb) throw new UnauthorizedException();
+
+    const {
+      accessToken,
+      refreshToken,
+      cookieToken,
+    } = await this.authService.getTokensForUser(userFromDb);
+
+    res.cookie('jwt', cookieToken, cookieOptions);
+
+    res.json({
+      accessToken,
+      refreshToken,
+    });
   }
 }

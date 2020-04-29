@@ -1,7 +1,7 @@
 import { Roles } from '@/user/interfaces';
 
 export interface ITokenPayload {
-  sub: number;
+  id: number;
   role: Roles;
   username: string;
   type: 'refresh' | 'access' | 'cookie';

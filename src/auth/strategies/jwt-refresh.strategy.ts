@@ -15,9 +15,9 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh'
     });
   }
 
-  async validate({ sub, type, ...other }: ITokenPayload): Promise<ITokenUser> {
+  async validate({ type, ...other }: ITokenPayload): Promise<ITokenUser> {
     if (type !== 'refresh') throw new UnauthorizedException();
 
-    return { id: sub, ...other };
+    return { ...other };
   }
 }

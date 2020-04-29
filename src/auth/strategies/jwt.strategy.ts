@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate({ sub, type, ...other }: ITokenPayload): Promise<ITokenUser> {
-    return { id: sub, ...other };
+  async validate({ type, ...other }: ITokenPayload): Promise<ITokenUser> {
+    return { ...other };
   }
 }

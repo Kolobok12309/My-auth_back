@@ -21,9 +21,9 @@ export class JwtCookieStrategy extends PassportStrategy(Strategy, 'jwt_cookie') 
     });
   }
 
-  async validate({ sub, type, ...other }: ITokenPayload): Promise<ITokenUser> {
+  async validate({ type, ...other }: ITokenPayload): Promise<ITokenUser> {
     if (type !== 'cookie') throw new UnauthorizedException();
 
-    return { id: sub, ...other };
+    return { ...other };
   }
 }
