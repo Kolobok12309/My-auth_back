@@ -1,12 +1,25 @@
-import { Controller, Body, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards, Res } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Response } from 'express';
 
 import { UserDto } from '@/user/dto';
 
 import { AuthService } from './auth.service';
 
+import { ITokenUser } from './interfaces';
+
+import { User } from './decorators';
+
 import { SignUpDto } from './dto';
 import { JwtRefreshGuard, JwtAuthGuard, LocalGuard } from './guards';
+
+const cookieOptions =  {
+  maxAge: 1000 * 60 * 60 * 24,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+};
+
 @ApiTags('Authorization')
 @Controller()
 export class AuthController {
@@ -15,8 +28,19 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('signIn')
   @ApiResponse({ status: 201, description: 'User logged in' })
-  async signIn(@Request() req) {
-    return this.authService.signIn(req.user);
+  async signIn(@Res() res: Response, @User() user: ITokenUser) {
+    const {
+      cookieToken,
+      accessToken,
+      refreshToken
+    } = await this.authService.signIn(user);
+
+    res.cookie('jwt', cookieToken, cookieOptions);
+
+    res.json({
+      accessToken,
+      refreshToken,
+    });
   }
 
   @Post('signUp')
@@ -34,7 +58,7 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   @ApiCreatedResponse({ description: 'Pair of updated tokens' })
-  async refreshToken(@Request() req) {
-    return req.user;
+  async refreshToken(@User() user: ITokenUser) {
+    return user;
   }
 }

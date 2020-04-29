@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Request } from 'express';
 
 import { ITokenPayload, ITokenUser } from '../interfaces';

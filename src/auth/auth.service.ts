@@ -9,7 +9,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { UserDto } from '@/user/dto';
 
-import { ISignUp, ISignIn } from './interfaces';
+import { ISignUp, ISignIn, ITokenUser } from './interfaces';
 
 const asyncCompare = promisify(compare);
 
@@ -41,19 +41,21 @@ export class AuthService {
     }
   }
 
-  async signIn(user: UserDto) {
+  async signIn(user: ITokenUser) {
     const payload = { username: user.username, sub: user.id, role: user.role };
 
-    const access_token = this.jwtService.sign({ ...payload, type: 'access' });
-    const refresh_token = this.jwtService.sign({ ...payload, type: 'refresh' }, { expiresIn: '7d' });
-    const cookie_token = this.jwtService.sign({ ...payload, type: 'cookie' });
+    const accessToken = this.jwtService.sign({ ...payload, type: 'access' });
+    const refreshToken = this.jwtService.sign({ sub: user.id, type: 'refresh' }, { expiresIn: '7d' });
+    const cookieToken = this.jwtService.sign({ ...payload, type: 'cookie' });
 
     return {
-      access_token,
-      refresh_token,
-      cookie_token,
+      accessToken,
+      refreshToken,
+      cookieToken,
     };
   }
+
+
 
   async signUp({ username, password }: ISignUp): Promise<UserDto> {
     return this.userService.create({ username, password });
