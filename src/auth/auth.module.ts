@@ -3,8 +3,11 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import UserModule from '@/user/user.module';
 
+import { RefreshTokenEntity } from './entities';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import {
@@ -26,6 +29,7 @@ import {
         signOptions: { expiresIn: '1d' },
       }),
     }),
+    TypeOrmModule.forFeature([RefreshTokenEntity]),
     ConfigModule,
   ],
   providers: [
