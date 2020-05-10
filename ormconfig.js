@@ -17,7 +17,7 @@ const mainConfig = {
   synchronize,
   dropSchema: false,
   logging: true,
-  entities: ['src/**/*.entity.ts', 'entity/*.ts'],
+  entities: ['src/entities/*.entity.ts'],
   subscribers: ['subscriber/**/*.ts'],
 };
 

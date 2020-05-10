@@ -7,8 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import UserModule from '@/user/user.module';
 
-import { RefreshTokenEntity } from './entities';
-import { AuthService } from './auth.service';
+import { RefreshTokenEntity } from '@/entities';
+import { AuthService, TokenService } from './services';
 import { AuthController } from './auth.controller';
 import {
   LocalStrategy,
@@ -34,6 +34,7 @@ import {
   ],
   providers: [
     AuthService,
+    TokenService,
     LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,

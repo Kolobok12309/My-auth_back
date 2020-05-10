@@ -1,4 +1,4 @@
-import { Controller, Body, Post, UseGuards, Res, UnauthorizedException } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards, Res, UnauthorizedException, Ip, Headers, Get, Param } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Response } from 'express';
@@ -7,7 +7,7 @@ import { UserDto } from '@/user/dto';
 
 import { UserService } from '@/user/user.service';
 
-import { AuthService } from './auth.service';
+import { AuthService, TokenService } from './services';
 
 import { ITokenUser } from './interfaces';
 
@@ -27,18 +27,29 @@ const cookieOptions =  {
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
     private readonly userService: UserService,
   ) {}
 
   @UseGuards(LocalGuard)
   @Post('signIn')
   @ApiResponse({ status: 201, description: 'User logged in' })
-  async signIn(@Res() res: Response, @User() user: ITokenUser) {
+  async signIn(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @Res() res: Response,
+    @User() user: ITokenUser,
+    @Ip() ip: string,
+    @Headers('user-agent') userAgent: string,
+  ) {
     const {
       cookieToken,
       accessToken,
       refreshToken
-    } = await this.authService.getTokensForUser(user);
+    } = await this.tokenService.generateTokens({
+      user,
+      userAgent,
+      ip,
+    });
 
     res.cookie('jwt', cookieToken, cookieOptions);
 
@@ -58,21 +69,45 @@ export class AuthController {
   @Post('signOut')
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'User logged out' })
-  async logout() {}
+  async logout(@Headers('Authorization') accessToken: string) {
+    const refreshId = this.tokenService.extractIdFromToken(accessToken);
+
+    return this.tokenService.revokeRefreshToken(refreshId);
+  }
 
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   @ApiCreatedResponse({ description: 'Pair of updated tokens' })
-  async refreshToken(@Res() res: Response, @User() user: ITokenUser) {
-    const userFromDb = await this.userService.findById(user.id);
+  async refreshToken(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @User() user: ITokenUser,
+    @Ip() ip: string,
+    @Headers('user-agent') userAgent: string,
+    @Res() res: Response,
+    @Body('refresh_token') token: string,
+  ) {
+    const tokenId = this.tokenService.extractIdFromToken(token);
 
-    if (!userFromDb) throw new UnauthorizedException();
+    const [isNotRevokedToken, userFromDb] = await Promise.all([
+      this.tokenService.validateRefreshToken(tokenId),
+      this.userService.findById(user.id),
+    ]);
 
-    const {
+    if (!isNotRevokedToken || !userFromDb)
+      throw new UnauthorizedException();
+
+    const [{
       accessToken,
       refreshToken,
       cookieToken,
-    } = await this.authService.getTokensForUser(userFromDb);
+    }] = await Promise.all([
+      this.tokenService.generateTokens({
+        user: userFromDb,
+        ip,
+        userAgent,
+      }),
+      this.tokenService.revokeRefreshToken(tokenId),
+    ]);
 
     res.cookie('jwt', cookieToken, cookieOptions);
 
@@ -80,5 +115,10 @@ export class AuthController {
       accessToken,
       refreshToken,
     });
+  }
+
+  @Get('/token/:id')
+  getToken(@Param('id') id: number) {
+    return this.tokenService.get(id);
   }
 }

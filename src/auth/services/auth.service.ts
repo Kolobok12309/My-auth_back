@@ -1,7 +1,5 @@
 import { promisify } from 'util';
 
-import { JwtService } from '@nestjs/jwt';
-
 import { compare } from 'bcrypt';
 
 import { Injectable } from '@nestjs/common';
@@ -9,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { UserDto } from '@/user/dto';
 
-import { ISignUp, ISignIn, ITokenUser } from './interfaces';
+import { ISignUp, ISignIn } from '../interfaces';
 
 const asyncCompare = promisify(compare);
 
@@ -17,7 +15,6 @@ const asyncCompare = promisify(compare);
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
   ) {}
 
   async validateUser({
@@ -39,21 +36,6 @@ export class AuthService {
     } catch (err) {
       return null;
     }
-  }
-
-  async getTokensForUser(user: ITokenUser) {
-    const { username, id, role } = user;
-    const payload = { username, id, role };
-
-    const accessToken = this.jwtService.sign({ ...payload, type: 'access' });
-    const refreshToken = this.jwtService.sign({ id, type: 'refresh' }, { expiresIn: '7d' });
-    const cookieToken = this.jwtService.sign({ ...payload, type: 'cookie' });
-
-    return {
-      accessToken,
-      refreshToken,
-      cookieToken,
-    };
   }
 
   async signUp({ username, password }: ISignUp): Promise<UserDto> {

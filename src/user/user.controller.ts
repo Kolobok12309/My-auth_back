@@ -27,7 +27,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @Auth([Roles.User])
+  @Auth([Roles.User, Roles.Admin, Roles.Editor, Roles.Root])
   @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
   async getUser(@Param() { id }: GetUserParamsDto) {
     return this.userService.findById(id);

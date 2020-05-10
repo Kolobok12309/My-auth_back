@@ -6,8 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
+import { UserEntity } from '@/entities';
+
 import { SALT_ROUNDS } from './user.consts';
-import { UserEntity } from './entities';
 import { ICreateUser, Roles } from './interfaces';
 import { UserDto } from './dto';
 
@@ -28,7 +29,9 @@ export class UserService {
   }
 
   async findById(id: number): Promise<UserDto> {
-    return this.userRepo.findOne(id);
+    return this.userRepo.findOne(id, {
+      relations: ['tokens'],
+    });
   }
 
   async findByLogin(username: string): Promise<UserEntity> {
