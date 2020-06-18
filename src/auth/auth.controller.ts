@@ -1,5 +1,5 @@
 import { Controller, Body, Post, UseGuards, Res, UnauthorizedException, Ip, Headers, Get, Param } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Response } from 'express';
 
@@ -13,7 +13,7 @@ import { ITokenUser } from './interfaces';
 
 import { User } from './decorators';
 
-import { SignUpDto } from './dto';
+import { SignUpDto, SignInDto, SignInResultDto } from './dto';
 import { JwtRefreshGuard, JwtAuthGuard, LocalGuard } from './guards';
 
 const cookieOptions =  {
@@ -33,7 +33,24 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('signIn')
-  @ApiResponse({ status: 201, description: 'User logged in' })
+  @ApiBody({ type: SignInDto })
+  @ApiHeader({
+    name: 'user-agent',
+    required: false,
+  })
+  @ApiCreatedResponse({
+    description: 'User logged in',
+    type: SignInResultDto,
+    headers: {
+      jwt: {
+        description: 'Jwt cookie token for get requests',
+        schema: {
+          type: 'string',
+        }
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({ description: 'Wrong username or password' })
   async signIn(
   // eslint-disable-next-line @typescript-eslint/indent
     @Res() res: Response,
@@ -68,7 +85,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('signOut')
   @ApiBearerAuth()
-  @ApiResponse({ status: 201, description: 'User logged out' })
+  @ApiCreatedResponse({ description: 'User logged out' })
   async logout(@Headers('Authorization') accessToken: string) {
     const refreshId = this.tokenService.extractIdFromToken(accessToken);
 

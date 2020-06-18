@@ -1,9 +1,10 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, Query } from '@nestjs/common';
-import { ApiTags, ApiQuery, ApiParam, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
 
 import { ITokenUser } from '@/auth/interfaces';
+import { PaginationDto } from '@/dto';
 
 import { UserService } from './user.service';
 import {
@@ -49,14 +50,15 @@ export class UserController {
   // async deleteSelf() {}
 
   @Get()
-  @ApiQuery({ name: 'page', type: Number, description: 'Page number', required: false })
-  @ApiQuery({
-    name: 'perPage',
-    type: Number,
-    description: 'Count of users per page',
-    required: false,
-  })
-  getAll(@Query() { page = 1, perPage = 20 }) {
-    return this.userService.findAll(page, perPage);
+  @ApiResponse({ status: 200, description: 'Sucessfully get users' })
+  async getAll(@Query() { page = 1, perPage = 20 }: PaginationDto) {
+    const [users, totalCount] = await this.userService.findAll(page, perPage);
+
+    return {
+      page,
+      perPage,
+      totalCount,
+      users,
+    };
   }
 }

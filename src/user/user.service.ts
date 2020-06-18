@@ -21,8 +21,8 @@ export class UserService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
-  findAll(page: number = 1, perPage: number = 20): Promise<UserDto[]> {
-    return this.userRepo.find({
+  findAll(page: number = 1, perPage: number = 20): Promise<[UserDto[], number]> {
+    return this.userRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),
     });

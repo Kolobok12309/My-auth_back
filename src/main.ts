@@ -22,6 +22,7 @@ async function bootstrap() {
     .setDescription('The auth API description')
     .setVersion('1.0')
     .addBearerAuth()
+    .addCookieAuth('jwt')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/api', app, document);
