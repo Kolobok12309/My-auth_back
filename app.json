@@ -15,6 +15,10 @@
     "heroku-postgresql"
   ],
   "env": {
+    "DB_SSL": {
+      "description": "Use ssl for database connection (need true for Heroku)",
+      "value": "true"
+    },
     "DB_SYNC": {
       "description": "Sync database scheme with application models",
       "required": false,
@@ -23,7 +27,7 @@
     "JWT_SECRET": {
       "description": "User for database (DATABASE_URL have more priority)",
       "generator": "secret"
-    },
+    }
   },
   "buildpacks": [
     {
