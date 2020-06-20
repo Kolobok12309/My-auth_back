@@ -25,7 +25,7 @@
       "value": "false"
     },
     "JWT_SECRET": {
-      "description": "User for database (DATABASE_URL have more priority)",
+      "description": "Secret token for jwt",
       "generator": "secret"
     }
   },
