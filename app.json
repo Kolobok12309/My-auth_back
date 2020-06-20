@@ -15,51 +15,15 @@
     "heroku-postgresql"
   ],
   "env": {
-    "DB_USER": {
-      "description": "User for database (DATABASE_URL have more priority)",
-      "required": false
-    },
-    "DB_PASS": {
-      "description": "Pass for database (DATABASE_URL have more priority)",
-      "required": false
-    },
-    "DB_HOST": {
-      "description": "Host for database (DATABASE_URL have more priority)",
-      "required": false
-    },
-    "DB_NAME": {
-      "description": "Name for database (DATABASE_URL have more priority)",
-      "required": false
-    },
-    "DB_PORT": {
-      "description": "Port for database (DATABASE_URL have more priority)",
-      "required": false
-    },
-    "DATABASE_URL": {
-      "description": "Database url (if set ignore DB_{PORT,NAME,HOST,PASS,USER})",
-      "required": false
-    },
-    "DB_SSL": {
-      "description": "SSL using by database",
+    "DB_SYNC": {
+      "description": "Sync database scheme with application models",
       "required": false,
       "value": "false"
-    },
-    "DB_SYNC": {
-      "description": "Sync database scheme with application models (if not set take NODE_END !== 'production')",
-      "required": false
     },
     "JWT_SECRET": {
       "description": "User for database (DATABASE_URL have more priority)",
       "generator": "secret"
     },
-    "PORT": {
-      "description": "Port for application",
-      "value": "3000"
-    },
-    "HOST": {
-      "description": "Host for application",
-      "value": "0.0.0.0"
-    }
   },
   "buildpacks": [
     {
