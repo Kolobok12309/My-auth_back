@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import UserModule from '@/user/user.module';
 
 import { RefreshTokenEntity } from '@/entities';
+
 import { AuthService, TokenService } from './services';
 import { AuthController } from './auth.controller';
 import {
@@ -25,7 +26,7 @@ import {
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'secret',
+        secret: configService.get<string>('JWT_SECRET', 'secret'),
         signOptions: { expiresIn: '1d' },
       }),
     }),

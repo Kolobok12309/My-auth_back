@@ -1,18 +1,16 @@
 const process = require('process');
 
-const isProd = process.env.NODE_ENV === 'production';
+const getEnv = (name, defaultValue = undefined) => process.env[name] !== undefined ? process.env[name] : defaultValue;
+
+const isProd = getEnv('NODE_ENV') === 'production';
 
 // eslint-disable-next-line no-nested-ternary
-const synchronize = process.env.DB_SYNC === 'true'
-  ? true
-  : process.env.DB_SYNC === 'false'
-    ? false
-    : !isProd;
+const synchronize = getEnv('DB_SYNC', !isProd);
 
 const connectionOptions = {
   type: 'postgres',
   synchronize,
-  ssl: process.env.DB_SSL === 'true',
+  ssl: getEnv('DB_SSL', false) === 'true',
   dropSchema: false,
   logging: true,
   entities: [isProd ? 'dist/entities/*.entity.js' : 'src/entities/*.entity.ts'],
@@ -21,19 +19,19 @@ const connectionOptions = {
 
 let mainConfig;
 
-if (process.env.DATABASE_URL) {
+if (getEnv('DATABASE_URL', false)) {
   mainConfig = {
     ...connectionOptions,
-    url: process.env.DATABASE_URL,
+    url: getEnv('DATABASE_URL'),
   };
 } else {
   mainConfig = {
     ...connectionOptions,
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASS || 'example',
-    database: process.env.DB_NAME || 'postgres',
+    host: getEnv('DB_HOST', 'localhost'),
+    port: getEnv('DB_PORT', 5432),
+    username: getEnv('DB_USER', 'postgres'),
+    password: getEnv('DB_PASS', 'example'),
+    database: getEnv('DB_NAME', 'postgres'),
   };
 }
 
