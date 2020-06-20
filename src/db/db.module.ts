@@ -13,7 +13,7 @@ export default TypeOrmModule.forRootAsync({
       dropSchema: false,
       logging: true,
       autoLoadEntities: true,
-      ssl: configService.get<string>('DB_SSL', false) === 'true',
+      ssl: configService.get<string>('DB_SSL') === 'true',
       keepConnectionAlive: true,
     } as PostgresConnectionOptions;
 
