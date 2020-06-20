@@ -23,10 +23,12 @@
     "migration:generate": "yarn run typeorm migration:generate -n",
     "migration:create": "yarn run typeorm migration:create -n",
     "migration:run": "yarn run typeorm migration:run",
+    "migration:run:prod": "typeorm migration:run",
     "migration:revert": "yarn run typeorm migration:revert",
     "seed:generate": "yarn run typeorm migration:generate -c seed -n ",
     "seed:create": "yarn run typeorm migration:create -c seed -n",
     "seed:run": "yarn run typeorm migration:run -c seed",
+    "seed:run:prod": "typeorm migration:run -c seed",
     "seed:revert": "yarn run typeorm migration:revert -c seed"
   },
   "engines": {

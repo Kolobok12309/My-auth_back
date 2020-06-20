@@ -1,20 +1,43 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 export default TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
-  useFactory: (configService: ConfigService) => ({
-    type: 'postgres',
-    host: configService.get<string>('DB_HOST') || 'localhost',
-    port: configService.get<number>('DB_PORT') || 5432,
-    username: configService.get<string>('DB_USER') || 'postgres',
-    password: configService.get<string>('DB_PASS') || 'example',
-    database: configService.get<string>('DB_NAME') || 'postgres',
-    synchronize: configService.get<string>('NODE_ENV') !== 'production',
-    dropSchema: false,
-    logging: true,
-    autoLoadEntities: true,
-    keepConnectionAlive: true,
-  }),
+  useFactory: (configService: ConfigService) => {
+    const isProd = configService.get<string>('NODE_ENV') === 'production';
+    // eslint-disable-next-line no-nested-ternary
+    const synchronize = configService.get<string>('DB_SYNC') === 'true'
+      ? true
+      : configService.get<string>('DB_SYNC') === 'false'
+        ? false
+        : !isProd;
+
+    const connectionOptions = {
+      type: 'postgres',
+      synchronize,
+      dropSchema: false,
+      logging: true,
+      autoLoadEntities: true,
+      ssl: configService.get<string>('DB_SSL') === 'true',
+      keepConnectionAlive: true,
+    } as PostgresConnectionOptions;
+
+    if (configService.get<string>('DATABASE_URL')) {
+      return {
+        ...connectionOptions,
+        url: configService.get<string>('DATABASE_URL'),
+      };
+    }
+
+    return {
+      ...connectionOptions,
+      host: configService.get<string>('DB_HOST') || 'localhost',
+      port: configService.get<number>('DB_PORT') || 5432,
+      username: configService.get<string>('DB_USER') || 'postgres',
+      password: configService.get<string>('DB_PASS') || 'example',
+      database: configService.get<string>('DB_NAME') || 'postgres',
+    };
+  },
   inject: [ConfigService]
 });

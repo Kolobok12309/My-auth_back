@@ -1,40 +1,55 @@
 const process = require('process');
 
-const host = process.env.DB_HOST || 'localhost';
-const port = process.env.DB_PORT || 5432;
-const username = process.env.DB_USER || 'postgres';
-const password = process.env.DB_PASS || 'example';
-const database = process.env.DB_NAME || 'postgres';
-const synchronize = process.env.NODE_ENV !== 'production';
+const isProd = process.env.NODE_ENV === 'production';
 
-const mainConfig = {
+// eslint-disable-next-line no-nested-ternary
+const synchronize = process.env.DB_SYNC === 'true'
+  ? true
+  : process.env.DB_SYNC === 'false'
+    ? false
+    : !isProd;
+
+const connectionOptions = {
   type: 'postgres',
-  host,
-  port,
-  username,
-  password,
-  database,
   synchronize,
+  ssl: process.env.DB_SSL === 'true',
   dropSchema: false,
   logging: true,
-  entities: ['src/entities/*.entity.ts'],
-  subscribers: ['subscriber/**/*.ts'],
+  entities: [isProd ? 'dist/entities/*.entity.js' : 'src/entities/*.entity.ts'],
+  subscribers: [isProd ? 'dist/subsribers/**/*.js' : 'src/subscribers/**/*.ts'],
 };
+
+let mainConfig;
+
+if (process.env.DATABASE_URL) {
+  mainConfig = {
+    ...connectionOptions,
+    url: process.env.DATABASE_URL,
+  };
+} else {
+  mainConfig = {
+    ...connectionOptions,
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASS || 'example',
+    database: process.env.DB_NAME || 'postgres',
+  };
+}
 
 module.exports = [
   {
     ...mainConfig,
-    migrations: ['migrations/**/*.ts'],
+    migrations: [isProd ? 'dist/migrations/*.js' : 'migrations/*.ts'],
     cli: {
-      entitiesDir: 'entity',
       migrationsDir: 'migrations',
-      subscribersDir: 'subscriber',
+      subscribersDir: 'subscribers',
     },
   },
   {
     ...mainConfig,
     name: 'seed',
-    migrations: ['seeds/*.ts'],
+    migrations: [isProd ? 'dist/seeds/*.js' : 'seeds/*.ts'],
     cli: {
       migrationsDir: 'seeds',
     },

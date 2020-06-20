@@ -17,7 +17,7 @@ export class UserEntity implements IUser {
   @Column({ select: false })
   password: string;
 
-  @Column({ default: Roles.User })
+  @Column({ default: Roles.User, type: 'integer' })
   role: Roles;
 
   @CreateDateColumn()
