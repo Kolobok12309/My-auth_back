@@ -7,11 +7,12 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "heroku-postbuild": "yarn build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest build --watch --webpack --webpackPath webpack-hmr.config.js",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint {src,test}/**/*.ts --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -27,6 +28,10 @@
     "seed:create": "yarn run typeorm migration:create -c seed -n",
     "seed:run": "yarn run typeorm migration:run -c seed",
     "seed:revert": "yarn run typeorm migration:revert -c seed"
+  },
+  "engines": {
+    "node": "12.x",
+    "yarn": "1.x"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
