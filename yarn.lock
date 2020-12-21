@@ -6756,10 +6756,10 @@ standard-version@^9.0.0:
     stringify-package "^1.0.1"
     yargs "^15.3.1"
 
-start-server-webpack-plugin@^2.2.5:
+start-server-nestjs-webpack-plugin@^2.2.5:
   version "2.2.5"
-  resolved "https://registry.yarnpkg.com/start-server-webpack-plugin/-/start-server-webpack-plugin-2.2.5.tgz#4a2838759b0f36acd11b0b2f5f196f289ae29d31"
-  integrity sha512-DRCkciwCJoCFZ+wt3wWMkR1M2mpVhJbUKFXqhK3FWyIUKYb42NnocH5sMwqgo+nPNHupqNwK/v8lgfBbr2NKdg==
+  resolved "https://registry.yarnpkg.com/start-server-nestjs-webpack-plugin/-/start-server-nestjs-webpack-plugin-2.2.5.tgz#4828f7fe964c275c9479d6a3aa0c31c52c8e2665"
+  integrity sha512-tnuGcGbT7qSF5h08/T7YkP6rX/m3DcsC+s8srzD7LNC7WIR7p/FU1+iZqfNUHAtjSFdAG0thK2H3by2AY1kr6w==
 
 static-extend@^0.1.1:
   version "0.1.2"
@@ -7553,11 +7553,6 @@ webpack-node-externals@2.5.2:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-2.5.2.tgz#178e017a24fec6015bc9e672c77958a6afac861d"
   integrity sha512-aHdl/y2N7PW2Sx7K+r3AxpJO+aDMcYzMQd60Qxefq3+EwhewSbTBqNumOsCE1JsCUNoyfGj5465N0sSf6hc/5w==
-
-webpack-node-externals@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-1.7.2.tgz#6e1ee79ac67c070402ba700ef033a9b8d52ac4e3"
-  integrity sha512-ajerHZ+BJKeCLviLUUmnyd5B4RavLF76uv3cs6KNuO8W+HuQaEs0y0L7o40NQxdPy5w0pcv8Ew7yPUAQG0UdCg==
 
 webpack-sources@^2.1.1:
   version "2.2.0"
