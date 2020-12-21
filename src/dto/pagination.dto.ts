@@ -24,7 +24,7 @@ export class PaginationDto {
   @Type(() => Number)
   @ApiProperty({
     required: false,
-    description: 'Count of users per page',
+    description: 'Count of elems per page',
     default: 20,
     minimum: 1,
     maximum: 100,
