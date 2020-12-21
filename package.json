@@ -1,6 +1,6 @@
 {
   "name": "my-auth-back",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "author": "",
   "license": "MIT",
@@ -28,7 +28,11 @@
     "seed:create": "yarn run typeorm migration:create -c seed -n",
     "seed:run": "yarn run typeorm migration:run -c seed",
     "seed:run:prod": "typeorm migration:run -c seed",
-    "seed:revert": "yarn run typeorm migration:revert -c seed"
+    "seed:revert": "yarn run typeorm migration:revert -c seed",
+    "release": "standard-version",
+    "release:patch": "yarn run release -- --release-as patch",
+    "release:minor": "yarn run release -- --release-as minor",
+    "release:major": "yarn run release -- --release-as major"
   },
   "engines": {
     "node": "12.x",
@@ -76,6 +80,7 @@
     "eslint-plugin-import": "^2.20.1",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "standard-version": "^9.0.0",
     "start-server-webpack-plugin": "^2.2.5",
     "supertest": "^4.0.2",
     "ts-jest": "^24.3.0",
