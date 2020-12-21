@@ -1,7 +1,9 @@
 name: Docker
 
 on:
-  release:
+  push:
+    tags:
+      - v*
 
 env:
   IMAGE_NAME: my-auth_back
