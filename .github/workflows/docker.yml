@@ -1,13 +1,7 @@
 name: Docker
 
 on:
-  push:
-    branches:
-      - master
-
   release:
-
-  pull_request:
 
 env:
   IMAGE_NAME: my-auth_back
