@@ -38,16 +38,14 @@ export class TokenService {
 
     const payload = { username, id, role, tokenId };
 
-    const [refreshToken, accessToken, cookieToken] = await Promise.all([
+    const [refreshToken, accessToken] = await Promise.all([
       this.jwtService.signAsync({ id, tokenId, type: 'refresh' }, { expiresIn: '7d' }),
       this.jwtService.signAsync({ ...payload, type: 'access' }),
-      this.jwtService.signAsync({ ...payload, type: 'cookie' }),
     ]);
 
     return {
       accessToken,
       refreshToken,
-      cookieToken,
     };
   }
 

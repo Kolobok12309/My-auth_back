@@ -4,5 +4,5 @@ export interface ITokenPayload {
   id: number;
   role: Roles;
   username: string;
-  type: 'refresh' | 'access' | 'cookie';
+  type: 'refresh' | 'access';
 }

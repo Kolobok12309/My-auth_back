@@ -3,13 +3,12 @@ import { ApiUnauthorizedResponse, ApiBearerAuth, ApiSecurity } from '@nestjs/swa
 
 import { Roles } from '@/user/interfaces';
 
-import { RolesGuard, JwtAuthGuard, JwtGuard } from '../guards';
+import { RolesGuard, JwtGuard } from '../guards';
 
-export const Auth = (roles: Roles[], { strict = false } = {}) =>
+export const Auth = (roles: Roles[]) =>
   applyDecorators(
     SetMetadata('roles', roles),
-    UseGuards(strict ? JwtGuard : JwtAuthGuard, RolesGuard),
+    UseGuards(JwtGuard, RolesGuard),
     ApiBearerAuth(),
-    ...(strict ? [] : [ApiSecurity('cookie')]),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   );

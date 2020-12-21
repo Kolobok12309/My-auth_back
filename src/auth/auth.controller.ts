@@ -14,13 +14,7 @@ import { ITokenUser } from './interfaces';
 import { User } from './decorators';
 
 import { SignUpDto, SignInDto, SignInResultDto } from './dto';
-import { JwtRefreshGuard, JwtAuthGuard, LocalGuard } from './guards';
-
-const cookieOptions =  {
-  maxAge: 1000 * 60 * 60 * 24,
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-};
+import { JwtRefreshGuard, JwtGuard, LocalGuard } from './guards';
 
 @ApiTags('Authorization')
 @Controller()
@@ -41,14 +35,6 @@ export class AuthController {
   @ApiCreatedResponse({
     description: 'User logged in',
     type: SignInResultDto,
-    headers: {
-      jwt: {
-        description: 'Jwt cookie token for get requests',
-        schema: {
-          type: 'string',
-        }
-      },
-    },
   })
   @ApiUnauthorizedResponse({ description: 'Wrong username or password' })
   async signIn(
@@ -59,7 +45,6 @@ export class AuthController {
     @Headers('user-agent') userAgent: string,
   ) {
     const {
-      cookieToken,
       accessToken,
       refreshToken
     } = await this.tokenService.generateTokens({
@@ -67,8 +52,6 @@ export class AuthController {
       userAgent,
       ip,
     });
-
-    res.cookie('jwt', cookieToken, cookieOptions);
 
     res.json({
       accessToken,
@@ -82,7 +65,7 @@ export class AuthController {
     return this.authService.signUp(registerAuthDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   @Post('signOut')
   @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'User logged out' })
@@ -116,7 +99,6 @@ export class AuthController {
     const [{
       accessToken,
       refreshToken,
-      cookieToken,
     }] = await Promise.all([
       this.tokenService.generateTokens({
         user: userFromDb,
@@ -125,8 +107,6 @@ export class AuthController {
       }),
       this.tokenService.revokeRefreshToken(tokenId),
     ]);
-
-    res.cookie('jwt', cookieToken, cookieOptions);
 
     res.json({
       accessToken,

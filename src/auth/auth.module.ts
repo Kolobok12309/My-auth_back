@@ -14,7 +14,6 @@ import { AuthController } from './auth.controller';
 import {
   LocalStrategy,
   JwtStrategy,
-  JwtCookieStrategy,
   JwtRefreshStrategy,
 } from './strategies';
 
@@ -39,7 +38,6 @@ import {
     LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
-    JwtCookieStrategy,
   ],
   controllers: [AuthController],
   exports: [AuthService],
