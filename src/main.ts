@@ -5,6 +5,8 @@ import * as cookieParser from 'cookie-parser';
 
 import { ValidationPipe } from '@nestjs/common';
 
+import { version } from '~/package.json';
+
 import AppModule from './app.module';
 
 declare const module: any;
@@ -20,7 +22,7 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('MyAuth system')
     .setDescription('The auth API description')
-    .setVersion('1.0')
+    .setVersion(version)
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
