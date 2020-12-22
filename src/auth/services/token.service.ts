@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 
 import { RefreshTokenEntity } from '@/entities';
 
-import { ITokenUser } from '../interfaces';
+import { Roles } from '@/user/interfaces';
 
 @Injectable()
 export class TokenService {
@@ -13,56 +13,51 @@ export class TokenService {
     @InjectRepository(RefreshTokenEntity)
     private readonly tokenRepo: Repository<RefreshTokenEntity>,
     private readonly jwtService: JwtService,
+    private readonly connection: Connection,
   ) {}
 
-  async generateTokens({
-    user,
+  createRefreshToken({
+    userId,
     userAgent = null,
     ip = null,
   } : {
-    user: ITokenUser,
+    userId: number,
     userAgent?: string,
     ip?: string
   }) {
-    const { username, id, role } = user;
-
-    const refreshTokenRaw = this.tokenRepo.create({
-      userId: id,
+    const rawRefreshToken = this.tokenRepo.create({
+      userId,
       userAgent,
-      ip,
+      ip
     });
 
-    const { id: tokenId } = await this.tokenRepo
-      .save(refreshTokenRaw);
-      // .then(({ generatedMaps }) => generatedMaps[0] as RefreshTokenEntity);
+    return this.tokenRepo.save(rawRefreshToken);
+  }
 
-    const payload = { username, id, role, tokenId };
-
+  async signTokens({
+    id,
+    tokenId,
+    username,
+    role
+  }: {
+    id: number,
+    tokenId: number,
+    username: string,
+    role: Roles
+  }) {
     const [refreshToken, accessToken] = await Promise.all([
       this.jwtService.signAsync({ id, tokenId, type: 'refresh' }, { expiresIn: '7d' }),
-      this.jwtService.signAsync({ ...payload, type: 'access' }),
+      this.jwtService.signAsync({ id, tokenId, username, role, type: 'access' }),
     ]);
 
     return {
-      accessToken,
       refreshToken,
+      accessToken,
     };
   }
 
-  async validateRefreshToken(id: number): Promise<boolean> {
-    const foundToken = await this.tokenRepo.findOne(id);
-
-    console.log(foundToken);
-
-    return Boolean(foundToken);
-  }
-
-  async revokeRefreshToken(tokenId: number) {
-    const foundToken = await this.tokenRepo.findOne(tokenId);
-
-    if (!foundToken) return;
-
-    await this.tokenRepo.remove(foundToken);
+  revokeRefreshToken(id: number) {
+    return this.tokenRepo.delete(id);
   }
 
   extractIdFromToken(token: string): number | null {
@@ -71,6 +66,49 @@ export class TokenService {
     if (!decoded || typeof decoded === 'string') return null;
 
     return decoded.tokenId;
+  }
+
+  // eslint-disable-next-line consistent-return
+  async refreshToken(id: number, {
+    userId,
+    userAgent = null,
+    ip = null,
+  } : {
+    userId: number,
+    userAgent?: string,
+    ip?: string
+  }) {
+    const rawRefreshToken = this.tokenRepo.create({
+      userId,
+      userAgent,
+      ip,
+    });
+
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const [refreshToken] = await Promise.all([
+        queryRunner.manager.save(rawRefreshToken),
+        queryRunner.manager.delete(RefreshTokenEntity, id),
+      ]);
+
+      await queryRunner.commitTransaction();
+
+      return refreshToken;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async isRefreshTokenRevoked(id: number): Promise<boolean> {
+    const foundToken = await this.tokenRepo.findOne(id);
+
+    return !foundToken;
   }
 
   get(id: number) {

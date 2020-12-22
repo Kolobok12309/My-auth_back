@@ -1,7 +1,6 @@
-import { Controller, Body, Post, UseGuards, Res, UnauthorizedException, Ip, Headers, Get, Param } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Response } from 'express';
 
 import { UserDto } from '@/user/dto';
 
@@ -15,6 +14,7 @@ import { User } from './decorators';
 
 import { SignUpDto, SignInDto, SignInResultDto } from './dto';
 import { JwtRefreshGuard, JwtGuard, LocalGuard } from './guards';
+import { RefreshDto } from './dto/refresh.dto';
 
 @ApiTags('Authorization')
 @Controller()
@@ -39,24 +39,27 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Wrong username or password' })
   async signIn(
   // eslint-disable-next-line @typescript-eslint/indent
-    @Res() res: Response,
-    @User() user: ITokenUser,
+    @User() { id, username, role }: ITokenUser,
     @Ip() ip: string,
     @Headers('user-agent') userAgent: string,
   ) {
-    const {
-      accessToken,
-      refreshToken
-    } = await this.tokenService.generateTokens({
-      user,
+    const { id: tokenId } = await this.tokenService.createRefreshToken({
+      userId: id,
       userAgent,
       ip,
     });
 
-    res.json({
+    const { refreshToken, accessToken } = await this.tokenService.signTokens({
+      id,
+      tokenId,
+      username,
+      role,
+    });
+
+    return {
       accessToken,
       refreshToken,
-    });
+    };
   }
 
   @Post('signUp')
@@ -77,41 +80,50 @@ export class AuthController {
 
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
+  @ApiBody({ type: RefreshDto })
+  @ApiHeader({
+    name: 'user-agent',
+    required: false,
+  })
   @ApiCreatedResponse({ description: 'Pair of updated tokens' })
+  @ApiUnauthorizedResponse({ description: 'Wrong refresh token' })
   async refreshToken(
   // eslint-disable-next-line @typescript-eslint/indent
-    @User() user: ITokenUser,
+    @User() { id, username, role }: ITokenUser,
     @Ip() ip: string,
     @Headers('user-agent') userAgent: string,
-    @Res() res: Response,
     @Body('refresh_token') token: string,
   ) {
     const tokenId = this.tokenService.extractIdFromToken(token);
 
-    const [isNotRevokedToken, userFromDb] = await Promise.all([
-      this.tokenService.validateRefreshToken(tokenId),
-      this.userService.findById(user.id),
+    const [isTokenRevoked, userFromDb] = await Promise.all([
+      this.tokenService.isRefreshTokenRevoked(tokenId),
+      this.userService.findById(id),
     ]);
 
-    if (!isNotRevokedToken || !userFromDb)
+    if (isTokenRevoked || !userFromDb)
       throw new UnauthorizedException();
 
-    const [{
-      accessToken,
-      refreshToken,
-    }] = await Promise.all([
-      this.tokenService.generateTokens({
-        user: userFromDb,
-        ip,
-        userAgent,
-      }),
-      this.tokenService.revokeRefreshToken(tokenId),
-    ]);
-
-    res.json({
-      accessToken,
-      refreshToken,
+    const refreshTokenEntity = await this.tokenService.refreshToken(tokenId, {
+      userId: id,
+      userAgent,
+      ip,
     });
+
+    if (!refreshTokenEntity)
+      throw new UnauthorizedException();
+
+    const { accessToken, refreshToken } = await this.tokenService.signTokens({
+      id,
+      tokenId: refreshTokenEntity.id,
+      username,
+      role,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   @Get('/token/:id')
