@@ -13,7 +13,7 @@ import { ITokenUser } from './interfaces';
 import { User } from './decorators';
 
 import { SignUpDto, SignInDto, SignInResultDto } from './dto';
-import { JwtRefreshGuard, JwtGuard, LocalGuard } from './guards';
+import { JwtRefreshGuard, JwtGuard } from './guards';
 import { RefreshDto } from './dto/refresh.dto';
 
 @ApiTags('Authorization')
@@ -25,7 +25,6 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
-  @UseGuards(LocalGuard)
   @Post('signIn')
   @ApiBody({ type: SignInDto })
   @ApiHeader({
@@ -36,24 +35,28 @@ export class AuthController {
     description: 'User logged in',
     type: SignInResultDto,
   })
-  @ApiUnauthorizedResponse({ description: 'Wrong username or password' })
+  @ApiUnauthorizedResponse()
   async signIn(
   // eslint-disable-next-line @typescript-eslint/indent
-    @User() { id, username, role }: ITokenUser,
-    @Ip() ip: string,
-    @Headers('user-agent') userAgent: string,
+    @Body() { username, password }: SignInDto,
+    @Ip() ip?: string,
+    @Headers('user-agent') userAgent?: string,
   ) {
+    const user = await this.authService.validateUser({ username, password });
+
+    if (!user) throw new UnauthorizedException('Wrong username or password');
+
     const { id: tokenId } = await this.tokenService.createRefreshToken({
-      userId: id,
+      userId: user.id,
       userAgent,
       ip,
     });
 
     const { refreshToken, accessToken } = await this.tokenService.signTokens({
-      id,
+      id: user.id,
       tokenId,
       username,
-      role,
+      role: user.role,
     });
 
     return {
@@ -75,7 +78,7 @@ export class AuthController {
   async logout(@Headers('Authorization') accessToken: string) {
     const refreshId = this.tokenService.extractIdFromToken(accessToken);
 
-    return this.tokenService.revokeRefreshToken(refreshId);
+    await this.tokenService.revokeRefreshToken(refreshId);
   }
 
   @UseGuards(JwtRefreshGuard)
@@ -89,10 +92,10 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Wrong refresh token' })
   async refreshToken(
   // eslint-disable-next-line @typescript-eslint/indent
-    @User() { id, username, role }: ITokenUser,
-    @Ip() ip: string,
-    @Headers('user-agent') userAgent: string,
     @Body('refresh_token') token: string,
+    @User() { id, username, role }: ITokenUser,
+    @Ip() ip?: string,
+    @Headers('user-agent') userAgent?: string,
   ) {
     const tokenId = this.tokenService.extractIdFromToken(token);
 

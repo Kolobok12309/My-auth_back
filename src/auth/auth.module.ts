@@ -12,7 +12,6 @@ import { RefreshTokenEntity } from '@/entities';
 import { AuthService, TokenService } from './services';
 import { AuthController } from './auth.controller';
 import {
-  LocalStrategy,
   JwtStrategy,
   JwtRefreshStrategy,
 } from './strategies';
@@ -35,7 +34,6 @@ import {
   providers: [
     AuthService,
     TokenService,
-    LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
   ],
