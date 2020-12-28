@@ -1,10 +1,9 @@
 import {MigrationInterface, QueryRunner} from 'typeorm';
 
 const users = [
-  { name: 'root', role: 0 },
-  { name: 'admin', role: 1 },
-  { name: 'editor', role: 2 },
-  { name: 'user', role: 3 },
+  { name: 'admin', role: 0 },
+  { name: 'director', role: 1 },
+  { name: 'user', role: 2 },
 ];
 
 // 1234567890

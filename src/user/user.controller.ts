@@ -21,14 +21,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @Auth([Roles.Admin, Roles.Root])
+  @Auth([Roles.Admin])
   @ApiCreatedResponse({ description: 'User created', type: UserDto })
   async createUser(@Body() createUserDto: CreateUserDto, @User() user: ITokenUser) {
     return user;
   }
 
   @Get(':id')
-  @Auth([Roles.User, Roles.Admin, Roles.Editor, Roles.Root])
+  @Auth([Roles.User, Roles.Admin, Roles.Director])
   @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
   async getUser(@Param() { id }: GetUserParamsDto) {
     return this.userService.findById(id);

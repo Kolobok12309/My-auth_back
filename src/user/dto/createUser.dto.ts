@@ -29,7 +29,7 @@ export class CreateUserDto implements ICreateUser {
 
   @IsOptional()
   @IsNumber()
-  @Min(Roles.Root)
+  @Min(Roles.Admin)
   @Max(Roles.User)
   @ApiProperty({
     required: false,

@@ -1,7 +1,6 @@
 export const enum Roles {
-  Root,
   Admin,
-  Editor,
+  Director,
   User,
 }
 

@@ -5,12 +5,13 @@ import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedRes
 import { UserDto } from '@/user/dto';
 
 import { UserService } from '@/user/user.service';
+import { Roles } from '@/user/interfaces';
 
 import { AuthService, TokenService } from './services';
 
 import { ITokenUser } from './interfaces';
 
-import { User } from './decorators';
+import { Auth, User } from './decorators';
 
 import { SignUpDto, SignInDto, SignInResultDto } from './dto';
 import { JwtRefreshGuard, JwtGuard } from './guards';
@@ -129,8 +130,9 @@ export class AuthController {
     };
   }
 
-  @Get('/token/:id')
-  getToken(@Param('id') id: number) {
-    return this.tokenService.get(id);
+  @Auth([Roles.Admin, Roles.Director, Roles.User])
+  @Get('/tokens')
+  getToken(@User() { id }: ITokenUser) {
+    return this.tokenService.getUserTokens(id);
   }
 }

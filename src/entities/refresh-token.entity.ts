@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, Index } from 'typeorm';
 
 // eslint-disable-next-line import/no-cycle
 import { UserEntity } from './user.entity';
@@ -14,6 +14,7 @@ export class RefreshTokenEntity {
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
+  @Index()
   @Column()
   userId: number;
 

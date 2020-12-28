@@ -111,6 +111,15 @@ export class TokenService {
     return !foundToken;
   }
 
+  getUserTokens(id: number) {
+    return this.tokenRepo.find({
+      where: {
+        userId: id,
+      },
+      select: ['id', 'userAgent', 'createdAt', 'ip'],
+    });
+  }
+
   get(id: number) {
     return this.tokenRepo.findOne(id, {
       relations: ['user']
