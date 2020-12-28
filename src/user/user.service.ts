@@ -1,5 +1,6 @@
 import { promisify } from 'util';
 
+import { authenticator } from 'otplib';
 import { hash } from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -62,18 +63,21 @@ export class UserService {
 
   async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
+    const otpSecret = authenticator.generateSecret();
 
     const { generatedMaps } = await this.userRepo.insert({
       username,
       role,
       email,
       password: hashedPass,
+      otp: otpSecret,
     });
 
     return {
       username,
       role,
       email,
+      otp: otpSecret,
       ...generatedMaps[0],
     } as UserDto;
   }

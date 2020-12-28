@@ -13,6 +13,11 @@ export class UserDto implements IUser {
   email: string;
 
   @ApiProperty({
+    description: 'Otp secret token',
+  })
+  otp: string;
+
+  @ApiProperty({
     description: 'User role',
   })
   role: Roles;
