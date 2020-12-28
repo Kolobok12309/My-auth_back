@@ -1,5 +1,5 @@
-import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader } from '@nestjs/swagger';
+import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException } from '@nestjs/common';
+import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 import { UserDto } from '@/user/dto';
@@ -130,9 +130,24 @@ export class AuthController {
     };
   }
 
-  @Auth([Roles.Admin, Roles.Director, Roles.User])
   @Get('/tokens')
-  getToken(@User() { id }: ITokenUser) {
+  @Auth([Roles.Admin, Roles.Director, Roles.User])
+  @ApiOkResponse({ description: 'List of active tokens' })
+  getTokens(@User() { id }: ITokenUser) {
     return this.tokenService.getUserTokens(id);
+  }
+
+  @Delete('/tokens/:id')
+  @Auth([Roles.Admin, Roles.Director, Roles.User])
+  @ApiOkResponse({ description: 'Token successfully revoked' })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  async revokeToken(@User() { id, role }: ITokenUser, @Param('id') tokenId: number) {
+    const token = await this.tokenService.get(tokenId);
+
+    if (!token) throw new NotFoundException('Token not found');
+    if (role !== Roles.Admin && token.userId !== id) throw new UnauthorizedException();
+
+    await this.tokenService.revokeRefreshToken(tokenId);
   }
 }

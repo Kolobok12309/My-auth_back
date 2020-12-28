@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, Query } from '@nestjs/common';
-import { ApiTags, ApiParam, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
 
@@ -50,7 +50,7 @@ export class UserController {
   // async deleteSelf() {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Sucessfully get users' })
+  @ApiOkResponse({ description: 'Sucessfully get users' })
   async getAll(@Query() { page = 1, perPage = 20 }: PaginationDto) {
     const [users, totalCount] = await this.userService.findAll(page, perPage);
 
