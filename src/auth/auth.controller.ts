@@ -1,5 +1,5 @@
-import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
+import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 import { UserDto } from '@/user/dto';
@@ -39,11 +39,11 @@ export class AuthController {
   @ApiUnauthorizedResponse()
   async signIn(
   // eslint-disable-next-line @typescript-eslint/indent
-    @Body() { username, password }: SignInDto,
+    @Body() { login, password }: SignInDto,
     @Ip() ip?: string,
     @Headers('user-agent') userAgent?: string,
   ) {
-    const user = await this.authService.validateUser({ username, password });
+    const user = await this.authService.validateUser({ login, password });
 
     if (!user) throw new UnauthorizedException('Wrong username or password');
 
@@ -56,7 +56,7 @@ export class AuthController {
     const { refreshToken, accessToken } = await this.tokenService.signTokens({
       id: user.id,
       tokenId,
-      username,
+      username: user.username,
       role: user.role,
     });
 
@@ -68,8 +68,22 @@ export class AuthController {
 
   @Post('signUp')
   @ApiCreatedResponse({ description: 'User registered', type: UserDto })
-  async signUp(@Body() registerAuthDto: SignUpDto) {
-    return this.authService.signUp(registerAuthDto);
+  @ApiConflictResponse({ description: 'Email or username is already in use' })
+  async signUp(@Body() { email, username, ...etc }: SignUpDto) {
+    const [isEmailAvailable, isUsernameAvailable] = await Promise.all([
+      this.userService.isEmailAvailable(email),
+      this.userService.isUsernameAvailable(username),
+    ]);
+
+    if (!isEmailAvailable) throw new ConflictException('Email is already in use');
+    if (!isUsernameAvailable) throw new ConflictException('Username is already in use');
+
+    return this.userService.create({
+      ...etc,
+      email,
+      username,
+      role: Roles.User,
+    });
   }
 
   @UseGuards(JwtGuard)

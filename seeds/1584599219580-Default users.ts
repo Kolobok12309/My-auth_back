@@ -15,7 +15,7 @@ export class DefaultUsers1584599219580 implements MigrationInterface {
     await users.reduce(async (acc, { name, role }) => {
       await acc;
 
-      return queryRunner.query(`INSERT INTO "users" (username, password, role) VALUES ('${name}', '${simplePass}', ${role})`, undefined);
+      return queryRunner.query(`INSERT INTO "users" (username, email, password, role) VALUES ('${name}', '${name}@example.com', '${simplePass}', ${role})`, undefined);
     }, Promise.resolve());
   }
 

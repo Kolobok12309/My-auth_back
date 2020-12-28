@@ -6,3 +6,6 @@ export const PASS_MIN_LENGTH = 10;
 
 // Minimal login length
 export const LOGIN_MIN_LENGTH = 4;
+
+// Maximum login length
+export const LOGIN_MAX_LENGTH = 30;

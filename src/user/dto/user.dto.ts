@@ -9,6 +9,9 @@ export class UserDto implements IUser {
   @ApiProperty()
   username: string;
 
+  @ApiProperty()
+  email: string;
+
   @ApiProperty({
     description: 'User role',
   })

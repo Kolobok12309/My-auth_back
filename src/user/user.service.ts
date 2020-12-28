@@ -28,33 +28,52 @@ export class UserService {
     });
   }
 
+  async isUsernameAvailable(username: string): Promise<boolean> {
+    return !(await this.userRepo.findOne({
+      where: {
+        username,
+      }
+    }));
+  }
+
+  async isEmailAvailable(email: string): Promise<boolean> {
+    return !(await this.userRepo.findOne({
+      where: {
+        email,
+      }
+    }));
+  }
+
   async findById(id: number): Promise<UserDto> {
     return this.userRepo.findOne(id, {
       relations: ['tokens'],
     });
   }
 
-  async findByLogin(username: string): Promise<UserEntity> {
+  async findByLogin(login: string): Promise<UserEntity> {
     return this.userRepo.findOne({
-      where: {
-        username,
-      },
-      select: ['password', 'username', 'role', 'id', 'createdAt'],
+      where: [
+        { username: login },
+        { email: login },
+      ],
+      select: ['password', 'username', 'role', 'email', 'id', 'createdAt'],
     });
   }
 
-  async create({ username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
+  async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
 
     const { generatedMaps } = await this.userRepo.insert({
       username,
       role,
+      email,
       password: hashedPass,
     });
 
     return {
       username,
       role,
+      email,
       ...generatedMaps[0],
     } as UserDto;
   }

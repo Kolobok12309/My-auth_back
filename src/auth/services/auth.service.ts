@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { UserDto } from '@/user/dto';
 
-import { ISignUp, ISignIn } from '../interfaces';
+import { ISignIn } from '../interfaces';
 
 const asyncCompare = promisify(compare);
 
@@ -18,11 +18,11 @@ export class AuthService {
   ) {}
 
   async validateUser({
-    username,
+    login,
     password: inPassword,
   }: ISignIn): Promise<UserDto | null> {
     try {
-      const user = await this.userService.findByLogin(username);
+      const user = await this.userService.findByLogin(login);
 
       const isPassRight = await asyncCompare(inPassword, user.password);
 
@@ -36,9 +36,5 @@ export class AuthService {
     } catch (err) {
       return null;
     }
-  }
-
-  async signUp({ username, password }: ISignUp): Promise<UserDto> {
-    return this.userService.create({ username, password });
   }
 }

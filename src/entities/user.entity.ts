@@ -14,6 +14,10 @@ export class UserEntity implements IUser {
   @Column({ unique: true, update: false })
   username: string;
 
+  @Index({ unique: true })
+  @Column({ unique: true })
+  email: string;
+
   @Column({ select: false })
   password: string;
 

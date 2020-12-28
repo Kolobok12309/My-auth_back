@@ -12,6 +12,7 @@ import { AuthService, TokenService } from './services';
 const testUser = {
   id: 123,
   username: 'someUsername',
+  email: 'some@example.com',
   password: 'somePassword',
   role: Roles.Admin,
 };
@@ -33,9 +34,9 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
-            validateUser: jest.fn().mockImplementation(({ username, password }) => {
+            validateUser: jest.fn().mockImplementation(({ login, password }) => {
               return Promise.resolve(
-                username === testUser.username && testUser.password === password
+                login === testUser.username && testUser.password === password
                   ? testUser
                   : null
               );
@@ -79,7 +80,9 @@ describe('AuthController', () => {
       const ip = '1.2.3.4';
       const userAgent = 'My random user agent';
 
-      const result = await authController.signIn(testUser, ip, userAgent);
+      const { username, password } = testUser;
+
+      const result = await authController.signIn({ login: username, password }, ip, userAgent);
 
       expect(authService.validateUser).toBeCalled();
       expect((authService.validateUser as any).mock.results[0].value).resolves.toBe(testUser);
@@ -105,7 +108,7 @@ describe('AuthController', () => {
     it('UnauthorizedError', async () => {
       try {
         await authController.signIn({
-          username: 'foo',
+          login: 'foo',
           password: 'bar',
         });
       } catch (err) {

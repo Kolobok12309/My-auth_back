@@ -5,6 +5,7 @@ import {
   IsNumber,
   Min,
   Max,
+  IsEmail,
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
@@ -19,6 +20,12 @@ export class CreateUserDto implements ICreateUser {
     description: 'Username for new user',
   })
   username: string;
+
+  @IsEmail()
+  @ApiProperty({
+    description: 'Email for new user',
+  })
+  email: string;
 
   @IsString()
   @Length(PASS_MIN_LENGTH)
