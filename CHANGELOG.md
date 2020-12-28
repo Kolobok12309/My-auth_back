@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.0...v0.4.1) (2020-12-28)
+
+
+### Features
+
+* **auth:** Add email to users ([bfd5145](https://github.com/Kolobok12309/My-auth_back/commit/bfd514520d13734cea4ae1e1a1c83ad30a380c8a))
+* **auth:** Add otp tokens ([6fc7f03](https://github.com/Kolobok12309/My-auth_back/commit/6fc7f0344429f6eb666120de454ea923ca2c3da9))
+* **auth:** Revoke tokens ([b420340](https://github.com/Kolobok12309/My-auth_back/commit/b420340e6a3d49af8f061d73ab2b1a17b8e060d1))
+
 ## [0.4.0](https://github.com/Kolobok12309/My-auth_back/compare/v0.3.1...v0.4.0) (2020-12-28)
 
 
