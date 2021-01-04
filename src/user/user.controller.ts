@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, Query, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, Query, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
@@ -11,7 +11,8 @@ import { UserService } from './user.service';
 import {
   CreateUserDto,
   GetUserParamsDto,
-  UserDto
+  UserDto,
+  UpdateUserDto,
 } from './dto';
 import { Roles } from './interfaces';
 
@@ -20,41 +21,6 @@ import { Roles } from './interfaces';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  // @Post()
-  // @Auth([Roles.Admin])
-  // @ApiCreatedResponse({ description: 'User created', type: UserDto })
-  // async createUser(@Body() createUserDto: CreateUserDto, @User() user: ITokenUser) {
-  //   return user;
-  // }
-
-  @Get(':id')
-  @Auth([Roles.User, Roles.Admin, Roles.Director])
-  @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
-  @ApiOkResponse({ description: 'Return user by id' })
-  @ApiNotFoundResponse({ description: 'User not found' })
-  async getUser(@Param() { id }: GetUserParamsDto) {
-    const user = await this.userService.findById(id);
-
-    if (!user) throw new NotFoundException('User not found');
-
-    return user;
-  }
-
-  // @Put(':id')
-  // async updateUser(
-  // @Param('id') id: number,
-  //   @Body() updateAdminUserDto: UpdateAdminUserDto,
-  // ) {}
-
-  // @Put()
-  // async updateSelfUser(@Body() updateUserDto: UpdateUserDto) {}
-
-  // @Delete(':id')
-  // async deleteUser(@Param('id') id: number) {}
-
-  // @Delete()
-  // async deleteSelf() {}
 
   @Get()
   @ApiOkResponse({ type: paginatedDtoFactory(UserDto) })
@@ -70,5 +36,63 @@ export class UserController {
         pageCount: getPageCount(totalCount, perPage),
       },
     };
+  }
+
+  @Get('self')
+  @Auth([Roles.User, Roles.Admin, Roles.Director])
+  @ApiOkResponse({ description: 'Return self user' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async getSelf(@User() { id }: ITokenUser) {
+    const user = await this.userService.findById(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
+  }
+
+  @Get(':id(\\d+)')
+  @Auth([Roles.User, Roles.Admin, Roles.Director])
+  @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
+  @ApiOkResponse({ description: 'Return user by id' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async getUser(@Param() { id }: GetUserParamsDto) {
+    const user = await this.userService.findById(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
+  }
+
+  @Put(':id')
+  @Auth([Roles.User, Roles.Admin, Roles.Director])
+  @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
+  @ApiOkResponse({ description: 'Return changed user', type: UserDto })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async updateUser(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @Param('id') editId: number,
+    @Body() updateUserDto: UpdateUserDto,
+    @User() { id, role }: ITokenUser,
+  ) {
+    const isSelfUpdate = editId === id;
+    const isAdmin = role === Roles.Admin;
+    const isOperationPermitted = isSelfUpdate || isAdmin;
+
+    if (!isOperationPermitted) throw new ForbiddenException();
+
+    const payload = { ...updateUserDto };
+
+    if (!isAdmin) delete payload.role;
+
+    return this.userService.edit(editId, payload);
+  }
+
+  @Delete(':id')
+  @Auth([Roles.Admin])
+  @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
+  @ApiOkResponse()
+  @ApiNotFoundResponse({ description: 'User not found' })
+  deleteUser(@Param('id') id: number) {
+    return this.userService.delete(id);
   }
 }

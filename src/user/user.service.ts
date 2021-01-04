@@ -2,7 +2,7 @@ import { promisify } from 'util';
 
 import { authenticator } from 'otplib';
 import { hash } from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '@/entities';
 
 import { SALT_ROUNDS } from './user.consts';
-import { ICreateUser, Roles } from './interfaces';
+import { ICreateUser, IUpdateUser, Roles } from './interfaces';
 import { UserDto } from './dto';
 
 const asyncHash = promisify(hash);
@@ -80,5 +80,25 @@ export class UserService {
       otp: otpSecret,
       ...generatedMaps[0],
     } as UserDto;
+  }
+
+  async edit(id: number, { email, role }: IUpdateUser): Promise<UserDto> {
+    const oldUser = await this.userRepo.findOne(id);
+
+    if (!oldUser) throw new NotFoundException('User not found');
+
+    return this.userRepo.save({
+      ...oldUser,
+      email,
+      role,
+    });
+  }
+
+  async delete(id: number) {
+    const { affected } = await this.userRepo.delete(id);
+
+    if (!affected) throw new NotFoundException('User not found');
+
+    return true;
   }
 }
