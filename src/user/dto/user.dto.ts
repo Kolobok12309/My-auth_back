@@ -19,6 +19,7 @@ export class UserDto implements IUser {
 
   @ApiProperty({
     description: 'User role',
+    enum: [Roles.Admin, Roles.Director, Roles.User],
   })
   role: Roles;
 

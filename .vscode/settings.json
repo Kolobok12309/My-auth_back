@@ -2,6 +2,7 @@
   "autoimport.filesToScan": "./src/**/*.ts",
   "eslint.format.enable": true,
   "conventionalCommits.scopes": [
-    "auth"
+    "auth",
+    "user"
   ]
 }
