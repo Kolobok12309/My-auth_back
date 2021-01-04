@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.3](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.2...v0.4.3) (2021-01-04)
+
+
+### Bug Fixes
+
+* **user:** :bug: Fix typing of paginated dto factory ([54da1e2](https://github.com/Kolobok12309/My-auth_back/commit/54da1e2c3bbd3cd97e3db08755f5df7a07c0cd23))
+
 ### [0.4.2](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.1...v0.4.2) (2021-01-04)
 
 
