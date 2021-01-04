@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.1...v0.4.2) (2021-01-04)
+
+
+### Features
+
+* **user:** :sparkles: Add editing and deleting of users ([abe0c26](https://github.com/Kolobok12309/My-auth_back/commit/abe0c263ee0b3d19b966c9a458d7b086f17b3d31))
+
 ### [0.4.1](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.0...v0.4.1) (2020-12-28)
 
 
