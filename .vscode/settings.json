@@ -3,6 +3,7 @@
   "eslint.format.enable": true,
   "conventionalCommits.scopes": [
     "auth",
-    "user"
+    "user",
+    "files"
   ]
 }

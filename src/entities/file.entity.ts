@@ -1,0 +1,24 @@
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+
+import { IFile } from '@/files/interfaces';
+
+import { UserEntity } from '.';
+
+@Entity('files')
+export class FileEntity implements IFile {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  url: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => UserEntity, user => user.files)
+  @JoinColumn({ name: 'userId' })
+  user: UserEntity;
+}

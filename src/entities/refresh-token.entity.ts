@@ -1,7 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, Index } from 'typeorm';
 
-// eslint-disable-next-line import/no-cycle
-import { UserEntity } from './user.entity';
+import { UserEntity } from '.';
 
 @Entity('refresh-tokens')
 export class RefreshTokenEntity {

@@ -1,9 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, Index, OneToMany } from 'typeorm';
 
-import { Roles, IUser } from '@/user/interfaces/user.interface';
+import { Roles, IUser } from '@/user/interfaces';
 
-// eslint-disable-next-line import/no-cycle
-import { RefreshTokenEntity } from './refresh-token.entity';
+import { RefreshTokenEntity, FileEntity } from '.';
 
 @Entity('users')
 export class UserEntity implements IUser {
@@ -32,4 +31,7 @@ export class UserEntity implements IUser {
 
   @OneToMany(() => RefreshTokenEntity, token => token.user)
   tokens: RefreshTokenEntity[];
+
+  @OneToMany(() => FileEntity, file => file.user)
+  files: FileEntity[];
 }
