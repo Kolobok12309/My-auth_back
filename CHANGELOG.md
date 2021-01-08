@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.3...v0.4.4) (2021-01-08)
+
+
+### Features
+
+* **files:** :sparkles: Add endpoints for upload and delete files ([6d628e2](https://github.com/Kolobok12309/My-auth_back/commit/6d628e22787eb3ec565aabca6dc05fb1f6cb98c1))
+* **files:** :sparkles: WIP Add files ([a23a34a](https://github.com/Kolobok12309/My-auth_back/commit/a23a34a5410023991d82ded5564c88a3ce26429a))
+
 ### [0.4.3](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.2...v0.4.3) (2021-01-04)
 
 
