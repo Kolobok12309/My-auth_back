@@ -10,7 +10,7 @@ export class FileEntity implements IFile {
   id: number;
 
   @Column()
-  url: string;
+  name: string;
 
   @CreateDateColumn()
   createdAt: Date;

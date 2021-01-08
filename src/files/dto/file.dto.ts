@@ -7,7 +7,7 @@ export class FileDto implements IFile {
   id: number;
 
   @ApiProperty()
-  url: string;
+  name: string;
 
   @ApiProperty()
   createdAt: Date;

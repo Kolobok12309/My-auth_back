@@ -1,7 +1,7 @@
 export interface IFile {
   id: number;
 
-  url: string;
+  name: string;
 
   createdAt: Date;
 
