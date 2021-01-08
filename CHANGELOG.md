@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.7](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.6...v0.4.7) (2021-01-08)
+
+
+### Features
+
+* **mail:** :sparkles: Add mailing and first template ([8feeeb0](https://github.com/Kolobok12309/My-auth_back/commit/8feeeb09b47ac875bac1bab79d6e9deecf316b46))
+* Add filter for duplication error ([d93be93](https://github.com/Kolobok12309/My-auth_back/commit/d93be9333ecd2674cb6933faa15d3aa5cd4f8639))
+
 ### [0.4.6](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.5...v0.4.6) (2021-01-08)
 
 ### [0.4.5](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.4...v0.4.5) (2021-01-08)
