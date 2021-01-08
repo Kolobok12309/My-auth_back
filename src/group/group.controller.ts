@@ -1,4 +1,4 @@
-import { Controller, Query, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Query, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Auth, User, ITokenUser } from '@/auth';
@@ -47,7 +47,7 @@ export class GroupController {
     return this.groupService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Auth([Roles.Admin, Roles.Director])
   @ApiParam({ name: 'id', type: Number, description: 'Id of group' })
   @ApiOkResponse({ type: GroupDto })

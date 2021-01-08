@@ -87,7 +87,7 @@ export class UserService {
     if (!oldUser) throw new NotFoundException('User not found');
 
     return this.userRepo.save({
-      ...oldUser,
+      id,
       email,
       role,
     });

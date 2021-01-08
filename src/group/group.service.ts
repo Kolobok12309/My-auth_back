@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -34,11 +34,22 @@ export class GroupService {
     });
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: number, { name }: UpdateGroupDto): Promise<GroupDto> {
+    const oldGroup = await this.groupRepo.findOne(id);
+
+    if (!oldGroup) throw new NotFoundException('Group not found');
+
+    return this.groupRepo.save({
+      id,
+      name,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: number) {
+    const { affected } = await this.groupRepo.delete(id);
+
+    if (!affected) throw new NotFoundException('Group not found');
+
+    return true;
   }
 }

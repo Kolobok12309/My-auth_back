@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, Query, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, Query, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
@@ -61,7 +61,7 @@ export class UserController {
     return user;
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Auth([Roles.User, Roles.Admin, Roles.Director])
   @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
   @ApiOkResponse({ description: 'Return changed user', type: UserDto })
