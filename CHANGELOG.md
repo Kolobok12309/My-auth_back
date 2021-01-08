@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.5](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.4...v0.4.5) (2021-01-08)
+
+
+### Features
+
+* **groups:** :sparkles: Add groups entity and getMany/getOne/create endpoints ([20bbd52](https://github.com/Kolobok12309/My-auth_back/commit/20bbd527b975b008766f7f3bcae0e33bca120d06))
+* **groups:** :sparkles: Add update and delete functions ([2146e3e](https://github.com/Kolobok12309/My-auth_back/commit/2146e3e375322c49e5233dd75889a407c547f674))
+
 ### [0.4.4](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.3...v0.4.4) (2021-01-08)
 
 
