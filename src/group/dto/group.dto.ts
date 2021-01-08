@@ -11,6 +11,6 @@ export class GroupDto implements IGroup {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: [UserDto] })
   users: UserDto[];
 }

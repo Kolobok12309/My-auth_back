@@ -16,6 +16,7 @@ import {
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([RefreshTokenEntity]),
     UserModule,
     PassportModule,
     JwtModule.registerAsync({
@@ -26,7 +27,6 @@ import {
         signOptions: { expiresIn: '1d' },
       }),
     }),
-    TypeOrmModule.forFeature([RefreshTokenEntity]),
     ConfigModule,
   ],
   providers: [

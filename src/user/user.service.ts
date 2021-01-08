@@ -10,7 +10,7 @@ import { UserEntity } from '@/entities';
 
 import { SALT_ROUNDS } from './user.consts';
 import { ICreateUser, IUpdateUser, Roles } from './interfaces';
-import { UserDto } from './dto';
+import { OtpUserDto, UserDto } from './dto';
 
 const asyncHash = promisify(hash);
 
@@ -60,7 +60,7 @@ export class UserService {
     });
   }
 
-  async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
+  async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<OtpUserDto> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
     const otpSecret = authenticator.generateSecret();
 
@@ -78,7 +78,7 @@ export class UserService {
       email,
       otp: otpSecret,
       ...generatedMaps[0],
-    } as UserDto;
+    } as OtpUserDto;
   }
 
   async edit(id: number, { email, role }: IUpdateUser): Promise<UserDto> {

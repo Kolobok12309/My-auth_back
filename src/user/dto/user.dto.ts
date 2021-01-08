@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { ApiProperty } from '@nestjs/swagger';
 
 import { IUser, Roles } from '../interfaces';
@@ -13,11 +14,6 @@ export class UserDto implements IUser {
   email: string;
 
   @ApiProperty({
-    description: 'Otp secret token',
-  })
-  otp: string;
-
-  @ApiProperty({
     description: 'User role',
     enum: [Roles.Admin, Roles.Director, Roles.User],
   })
@@ -27,4 +23,11 @@ export class UserDto implements IUser {
     description: 'Date of creating user',
   })
   createdAt: Date;
+}
+
+export class AdditionalUserInfo {
+  @ApiProperty({
+    description: 'Otp secret token',
+  })
+  otp: string;
 }

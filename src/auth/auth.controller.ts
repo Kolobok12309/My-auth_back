@@ -1,7 +1,7 @@
 import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 
-import { Roles, UserService, UserDto } from '@/user';
+import { Roles, UserService, OtpUserDto } from '@/user';
 
 import { AuthService, TokenService } from './services';
 import { ITokenUser } from './interfaces';
@@ -59,7 +59,7 @@ export class AuthController {
   }
 
   @Post('signUp')
-  @ApiCreatedResponse({ description: 'User registered', type: UserDto })
+  @ApiCreatedResponse({ description: 'User registered', type: OtpUserDto })
   @ApiConflictResponse({ description: 'Email or username is already in use' })
   async signUp(@Body() { email, username, ...etc }: SignUpDto) {
     const [isEmailAvailable, isUsernameAvailable] = await Promise.all([
