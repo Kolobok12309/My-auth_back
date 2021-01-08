@@ -5,6 +5,7 @@
     "auth",
     "user",
     "files",
-    "groups"
+    "groups",
+    "mail"
   ]
 }

@@ -1,16 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
 
 import { GroupEntity } from '@/entities';
 
+import { IMailingOptions } from './interfaces';
 import { CreateGroupDto, UpdateGroupDto, GroupDto } from './dto';
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectRepository(GroupEntity)
-    private readonly groupRepo: Repository<GroupEntity>
+    private readonly groupRepo: Repository<GroupEntity>,
+    private readonly mailerService: MailerService,
   ) {}
 
   create({ name }: CreateGroupDto) {
@@ -51,5 +54,32 @@ export class GroupService {
     if (!affected) throw new NotFoundException('Group not found');
 
     return true;
+  }
+
+  async mailing(id: number, {
+    template,
+    subject,
+  }: IMailingOptions) {
+    const group = await this.findOne(id);
+
+    if (!group) throw new NotFoundException('Group not found');
+
+    await Promise.all(group.users.map(user =>
+      this
+        .mailerService
+        .sendMail({
+          to: user.email,
+          subject,
+          template,
+          context: {
+            user
+          },
+        })
+        .catch(err => {
+          console.error(err);
+
+          throw new InternalServerErrorException('Error while mailing');
+        })
+    ));
   }
 }
