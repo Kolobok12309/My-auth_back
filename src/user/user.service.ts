@@ -81,7 +81,7 @@ export class UserService {
     } as OtpUserDto;
   }
 
-  async edit(id: number, { email, role }: IUpdateUser): Promise<UserDto> {
+  async edit(id: number, { email, role, groupId }: IUpdateUser): Promise<UserDto> {
     const oldUser = await this.userRepo.findOne(id);
 
     if (!oldUser) throw new NotFoundException('User not found');
@@ -90,6 +90,7 @@ export class UserService {
       id,
       email,
       role,
+      groupId,
     });
   }
 

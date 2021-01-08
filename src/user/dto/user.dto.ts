@@ -13,6 +13,9 @@ export class UserDto implements IUser {
   @ApiProperty()
   email: string;
 
+  @ApiProperty()
+  groupId: number;
+
   @ApiProperty({
     description: 'User role',
     enum: [Roles.Admin, Roles.Director, Roles.User],

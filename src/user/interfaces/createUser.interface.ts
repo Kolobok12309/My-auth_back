@@ -5,6 +5,8 @@ export interface ICreateUser {
 
   email: string;
 
+  groupId?: number;
+
   password: string;
 
   role?: Roles;

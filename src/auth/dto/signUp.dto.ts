@@ -1,4 +1,4 @@
-import { Length, IsString, IsEmail } from 'class-validator';
+import { Length, IsString, IsEmail, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 import {
@@ -20,6 +20,11 @@ export class SignUpDto implements ICreateUser {
   @IsEmail()
   @ApiProperty()
   email: string;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  groupId?: number;
 
   @IsString()
   @Length(PASS_MIN_LENGTH)

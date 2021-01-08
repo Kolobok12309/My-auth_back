@@ -26,6 +26,11 @@ export class CreateUserDto implements ICreateUser {
   })
   email: string;
 
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  groupId?: number;
+
   @IsString()
   @Length(PASS_MIN_LENGTH)
   @ApiProperty({

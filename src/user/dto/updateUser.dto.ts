@@ -11,8 +11,14 @@ import { Roles, IUpdateUser } from '../interfaces';
 
 export class UpdateUserDto implements IUpdateUser {
   @IsEmail()
-  @ApiProperty()
-  email: string;
+  @IsOptional()
+  @ApiProperty({ required: false })
+  email?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ nullable: true, required: false })
+  groupId?: number;
 
   @IsOptional()
   @IsNumber()
