@@ -46,7 +46,7 @@ export class UserService {
 
   async findById(id: number): Promise<UserDto> {
     return this.userRepo.findOne(id, {
-      relations: ['tokens'],
+      relations: ['tokens', 'group'],
     });
   }
 

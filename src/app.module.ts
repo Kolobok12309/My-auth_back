@@ -5,6 +5,7 @@ import { DbModule } from '@/db';
 import { AuthModule } from '@/auth';
 import { FilesModule } from '@/files';
 import { UserModule } from '@/user';
+import { GroupModule } from '@/group';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UserModule } from '@/user';
     AuthModule,
     ConfigModule.forRoot(),
     FilesModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [],

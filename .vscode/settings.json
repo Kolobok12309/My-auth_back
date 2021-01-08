@@ -4,6 +4,7 @@
   "conventionalCommits.scopes": [
     "auth",
     "user",
-    "files"
+    "files",
+    "groups"
   ]
 }
