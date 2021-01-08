@@ -2,7 +2,6 @@ import { Controller, Post, Body, Get, Param, Put, Delete, Query, NotFoundExcepti
 import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
-
 import { ITokenUser } from '@/auth/interfaces';
 import { PaginationDto, PaginatedDto, paginatedDtoFactory } from '@/dto';
 import { getPageCount } from '@/utils';
@@ -15,7 +14,6 @@ import {
   UpdateUserDto,
 } from './dto';
 import { Roles } from './interfaces';
-
 
 @ApiTags('User')
 @Controller('user')

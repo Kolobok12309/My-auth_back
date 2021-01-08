@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IFile } from '@/files/interfaces';
+import { IFile } from '../interfaces';
 
 export class FileDto implements IFile {
   @ApiProperty()

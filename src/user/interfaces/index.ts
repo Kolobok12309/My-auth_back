@@ -1,3 +1,3 @@
-export { Roles, IUser } from './user.interface';
-export { ICreateUser } from './createUser.interface';
-export { IUpdateUser } from './updateUser.interface';
+export * from './user.interface';
+export * from './createUser.interface';
+export * from './updateUser.interface';

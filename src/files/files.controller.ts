@@ -2,12 +2,11 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { Controller, Post, Param, Delete, UploadedFiles, UseInterceptors, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiParam, ApiNotFoundResponse, ApiTags, ApiBody, ApiConsumes } from '@nestjs/swagger';
 
-import { Auth, User } from '@/auth/decorators';
-import { ITokenUser } from '@/auth/interfaces';
-import { Roles } from '@/user/interfaces';
-import { IFileMulter } from '@/files/interfaces';
-import { FileDto, FileUploadDto } from '@/files/dto';
+import { Auth, User, ITokenUser } from '@/auth';
+import { Roles } from '@/user';
 
+import { IFileMulter } from './interfaces';
+import { FileDto, FileUploadDto } from './dto';
 import { FilesService } from './files.service';
 
 @ApiTags('files')

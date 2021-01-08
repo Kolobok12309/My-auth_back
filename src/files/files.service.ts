@@ -1,18 +1,16 @@
 import { promisify } from 'util';
-
 import { unlink } from 'fs';
-
 import { resolve } from 'path';
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
-
 import { ConfigService } from '@nestjs/config';
 
 import { FileEntity } from '@/entities';
-import { FileDto } from '@/files/dto';
-import { IFileMulter } from '@/files/interfaces';
+
+import { FileDto } from './dto';
+import { IFileMulter } from './interfaces';
 
 const asyncUnlink = promisify(unlink);
 

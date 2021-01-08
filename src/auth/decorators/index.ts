@@ -1,2 +1,2 @@
-export { User } from './user.decorator';
-export { Auth } from './auth.decorator';
+export * from './user.decorator';
+export * from './auth.decorator';

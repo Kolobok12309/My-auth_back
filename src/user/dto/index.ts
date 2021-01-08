@@ -1,4 +1,4 @@
-export { CreateUserDto } from './createUser.dto';
-export { GetUserParamsDto } from './getUser.dto';
-export { UserDto } from './user.dto';
-export { UpdateUserDto } from './updateUser.dto';
+export * from './createUser.dto';
+export * from './getUser.dto';
+export * from './user.dto';
+export * from './updateUser.dto';

@@ -1,21 +1,13 @@
 import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
-// eslint-disable-next-line import/no-extraneous-dependencies
 
-import { UserDto } from '@/user/dto';
-
-import { UserService } from '@/user/user.service';
-import { Roles } from '@/user/interfaces';
+import { Roles, UserService, UserDto } from '@/user';
 
 import { AuthService, TokenService } from './services';
-
 import { ITokenUser } from './interfaces';
-
 import { Auth, User } from './decorators';
-
-import { SignUpDto, SignInDto, SignInResultDto } from './dto';
+import { SignUpDto, SignInDto, SignInResultDto, RefreshDto } from './dto';
 import { JwtRefreshGuard, JwtGuard } from './guards';
-import { RefreshDto } from './dto/refresh.dto';
 
 @ApiTags('Authorization')
 @Controller()

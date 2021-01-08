@@ -1,4 +1,4 @@
-import { Roles } from '@/user/interfaces';
+import { Roles } from '@/user';
 
 export interface ITokenPayload {
   id: number;

@@ -1,7 +1,7 @@
 import { applyDecorators, UseGuards, SetMetadata } from '@nestjs/common';
 import { ApiUnauthorizedResponse, ApiBearerAuth } from '@nestjs/swagger';
 
-import { Roles } from '@/user/interfaces';
+import { Roles } from '@/user';
 
 import { RolesGuard, JwtGuard } from '../guards';
 

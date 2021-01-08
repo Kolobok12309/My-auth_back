@@ -4,8 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
 
 import { RefreshTokenEntity } from '@/entities';
-
-import { Roles } from '@/user/interfaces';
+import { Roles } from '@/user';
 
 @Injectable()
 export class TokenService {

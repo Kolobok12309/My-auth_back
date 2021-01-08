@@ -1,7 +1,7 @@
 import { JwtGuard } from './jwt.guard';
 
-export { JwtRefreshGuard } from './jwt_refresh.guard';
-export { RolesGuard } from './roles.guard';
+export * from './jwt_refresh.guard';
+export * from './roles.guard';
 
 export {
   JwtGuard,

@@ -1,4 +1,4 @@
-export { PaginationDto } from './pagination.dto';
-export { PaginatedDto } from './paginated.dto';
-export { MetaDto } from './meta.dto';
-export { paginatedDtoFactory } from './paginated.dto.factory';
+export * from './pagination.dto';
+export * from './paginated.dto';
+export * from './meta.dto';
+export * from './paginated.dto.factory';

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { AuthModule } from './auth/auth.module';
-import { FilesModule } from './files/files.module';
-
-import UserModule from './user/user.module';
-import DbModule from './db/db.module';
+import { DbModule } from '@/db';
+import { AuthModule } from '@/auth';
+import { FilesModule } from '@/files';
+import { UserModule } from '@/user';
 
 @Module({
   imports: [

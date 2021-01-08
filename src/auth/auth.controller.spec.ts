@@ -1,13 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { UnauthorizedException } from '@nestjs/common';
 
-import { UserService } from '@/user/user.service';
+import { UserService, Roles } from '@/user';
 
-import { Roles } from '@/user/interfaces';
+import { TokenService } from './services';
 
-import { AuthController } from './auth.controller';
-import { AuthService, TokenService } from './services';
+import { AuthController, AuthService } from '.';
 
 const testUser = {
   id: 123,

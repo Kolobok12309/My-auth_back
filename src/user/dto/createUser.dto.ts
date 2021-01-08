@@ -7,7 +7,6 @@ import {
   Max,
   IsEmail,
 } from 'class-validator';
-
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Roles, ICreateUser } from '../interfaces';

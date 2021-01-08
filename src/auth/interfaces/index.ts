@@ -1,3 +1,3 @@
-export { ISignIn } from './signIn.interface';
-export { ITokenUser } from './tokenUser.interface';
-export { ITokenPayload } from './tokenPayload.interface';
+export * from './signIn.interface';
+export * from './tokenUser.interface';
+export * from './tokenPayload.interface';

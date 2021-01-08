@@ -1,11 +1,9 @@
 import { promisify } from 'util';
 
 import { compare } from 'bcrypt';
-
 import { Injectable } from '@nestjs/common';
 
-import { UserService } from '@/user/user.service';
-import { UserDto } from '@/user/dto';
+import { UserService, UserDto } from '@/user';
 
 import { ISignIn } from '../interfaces';
 

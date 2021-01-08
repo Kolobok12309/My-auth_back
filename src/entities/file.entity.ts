@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-import { IFile } from '@/files/interfaces';
+import { IFile } from '@/files';
 
 import { UserEntity } from '.';
 

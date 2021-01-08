@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { MetaDto, PaginatedDto } from '.';
+import { PaginatedDto } from './paginated.dto';
+import { MetaDto } from './meta.dto';
 
 export const paginatedDtoFactory = <T extends Function>(type: T): (new () => PaginatedDto<T>) => {
   class paginatedDto implements PaginatedDto<T> {

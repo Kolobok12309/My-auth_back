@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Roles, IUpdateUser } from '@/user/interfaces';
+import { Roles, IUpdateUser } from '../interfaces';
 
 export class UpdateUserDto implements IUpdateUser {
   @IsEmail()

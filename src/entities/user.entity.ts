@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, Index, OneToMany } from 'typeorm';
 
-import { Roles, IUser } from '@/user/interfaces';
+import { Roles, IUser } from '@/user';
 
 import { RefreshTokenEntity, FileEntity } from '.';
 
