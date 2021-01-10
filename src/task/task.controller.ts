@@ -62,6 +62,7 @@ export class TaskController {
   }
 
   @Delete(':id')
+  @Auth([Roles.Admin, Roles.Director])
   @ApiParam({ name: 'id', type: Number, description: 'Id of task' })
   @ApiNotFoundResponse()
   remove(@Param('id') id: number) {
