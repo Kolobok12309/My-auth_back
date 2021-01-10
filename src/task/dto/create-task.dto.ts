@@ -40,10 +40,25 @@ export class CreateTaskDto implements ITask {
   })
   status: TaskStatus;
 
+  @Exclude()
+  group;
+
+  @IsNumber()
+  @ApiProperty()
+  groupId: number;
+
+  @Exclude()
+  user;
+
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({ required: false })
+  userId?: number;
+
   @IsDateString()
   @IsOptional()
   @ApiProperty({ required: false })
-  deadline: Date;
+  deadline?: Date;
 
   @Exclude()
   createdBy;

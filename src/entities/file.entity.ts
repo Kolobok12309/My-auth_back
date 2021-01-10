@@ -26,7 +26,10 @@ export class FileEntity implements IFile {
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  @ManyToOne(() => TaskEntity, task => task.files, { nullable: true })
+  @ManyToOne(() => TaskEntity, task => task.files, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   task: TaskEntity;
 }

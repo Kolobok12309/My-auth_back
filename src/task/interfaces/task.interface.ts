@@ -1,4 +1,4 @@
-import { FileEntity, UserEntity } from '@/entities';
+import { FileEntity, GroupEntity, UserEntity } from '@/entities';
 
 import { TaskStatus } from './taskStatus.interface';
 
@@ -13,9 +13,13 @@ export interface ITask {
 
   status: TaskStatus;
 
-  deadline: Date;
+  group: GroupEntity;
 
-  createdBy: UserEntity;
+  user?: UserEntity;
+
+  deadline?: Date;
+
+  createdBy?: UserEntity;
 
   createdAt: Date;
 }

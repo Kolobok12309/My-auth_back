@@ -16,7 +16,6 @@ export class TaskEntity implements ITask {
   description: string;
 
   @OneToMany(() => FileEntity, file => file.task, {
-    cascade: true,
     eager: true,
   })
   files: FileEntity[];
@@ -24,21 +23,30 @@ export class TaskEntity implements ITask {
   @Column({ default: TaskStatus.ToDo, type: 'integer' })
   status: TaskStatus;
 
-  @ManyToOne(() => GroupEntity, group => group.tasks)
+  @ManyToOne(() => GroupEntity, group => group.tasks, {
+    nullable: false,
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   group: GroupEntity;
 
   @ManyToOne(() => UserEntity, user => user.tasks, {
     nullable: true,
     eager: true,
+    onDelete: 'SET NULL',
   })
-  user: UserEntity;
+  user?: UserEntity;
 
   @Column({ nullable: true })
-  deadline: Date;
+  deadline?: Date;
 
-  @ManyToOne(() => UserEntity, { eager: true })
+  @ManyToOne(() => UserEntity, {
+    eager: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
-  createdBy: UserEntity;
+  createdBy?: UserEntity;
 
   @CreateDateColumn()
   createdAt: Date;

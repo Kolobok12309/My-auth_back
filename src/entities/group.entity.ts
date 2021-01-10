@@ -7,6 +7,10 @@ import { UserEntity, TaskEntity } from '.';
 
 @Entity('groups')
 export class GroupEntity implements IGroup {
+  constructor(id) {
+    this.id = id;
+  }
+
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;

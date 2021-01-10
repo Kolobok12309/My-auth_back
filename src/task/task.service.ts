@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { FileEntity, TaskEntity, UserEntity } from '@/entities';
+import { FileEntity, TaskEntity, UserEntity, GroupEntity } from '@/entities';
 
 import { CreateTaskDto, UpdateTaskDto, TaskDto } from './dto';
 
@@ -13,20 +13,24 @@ export class TaskService {
     private readonly taskRepo: Repository<TaskEntity>,
   ) {}
 
-  create(createTaskDto: CreateTaskDto, userId: number): Promise<TaskEntity> {
-    const { fileIds, ...dto } = createTaskDto;
+  create(createTaskDto: CreateTaskDto, createdById: number): Promise<TaskEntity> {
+    const { fileIds, groupId, userId, ...dto } = createTaskDto;
 
     const files = fileIds.map(id => new FileEntity(id));
-    const createdBy = new UserEntity(userId);
+    const createdBy = new UserEntity(createdById);
+    const group = new GroupEntity(groupId);
+    const user = userId && new UserEntity(userId) || null;
 
     return this.taskRepo.save({
       ...dto,
       files,
       createdBy,
+      group,
+      user,
     });
   }
 
-  findAll(page: number = 1, perPage: number = 20): Promise<[TaskDto[], number]> {
+  findAll(page: number = 1, perPage: number = 20): Promise<[TaskEntity[], number]> {
     return this.taskRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),
@@ -41,7 +45,11 @@ export class TaskService {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async delete(id: number) {
+    const { affected } = await this.taskRepo.delete(id);
+
+    if (!affected) throw new NotFoundException('User not found');
+
+    return true;
   }
 }
