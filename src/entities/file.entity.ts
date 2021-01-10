@@ -2,10 +2,14 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, Jo
 
 import { IFile } from '@/files/interfaces';
 
-import { UserEntity } from '.';
+import { UserEntity, TaskEntity } from '.';
 
 @Entity('files')
 export class FileEntity implements IFile {
+  constructor(id) {
+    this.id = id;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,4 +25,8 @@ export class FileEntity implements IFile {
   @ManyToOne(() => UserEntity, user => user.files)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
+
+  @ManyToOne(() => TaskEntity, task => task.files, { nullable: true })
+  @JoinColumn()
+  task: TaskEntity;
 }

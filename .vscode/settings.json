@@ -6,6 +6,7 @@
     "user",
     "files",
     "groups",
-    "mail"
+    "mail",
+    "task"
   ]
 }

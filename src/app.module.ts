@@ -10,6 +10,7 @@ import { AuthModule } from '@/auth';
 import { FilesModule } from '@/files';
 import { UserModule } from '@/user';
 import { GroupModule } from '@/group';
+import { TaskModule } from '@/task';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -19,6 +20,7 @@ const isProd = process.env.NODE_ENV === 'production';
     AuthModule,
     FilesModule,
     GroupModule,
+    TaskModule,
     DbModule,
     ConfigModule.forRoot(),
     MailerModule.forRootAsync({

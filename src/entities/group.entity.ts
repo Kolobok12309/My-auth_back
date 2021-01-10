@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IGroup } from '@/group/interfaces';
 
-import { UserEntity } from '.';
+import { UserEntity, TaskEntity } from '.';
 
 @Entity('groups')
 export class GroupEntity implements IGroup {
@@ -17,4 +17,7 @@ export class GroupEntity implements IGroup {
 
   @OneToMany(() => UserEntity, user => user.group)
   users: UserEntity[];
+
+  @OneToMany(() => TaskEntity, task => task.group)
+  tasks: TaskEntity[];
 }

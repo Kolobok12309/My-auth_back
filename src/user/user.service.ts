@@ -2,7 +2,7 @@ import { promisify } from 'util';
 
 import { authenticator } from 'otplib';
 import { hash } from 'bcrypt';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Repository } from 'typeorm';

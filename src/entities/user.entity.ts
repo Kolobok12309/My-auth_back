@@ -2,10 +2,16 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, Index, OneToM
 
 import { Roles, IUser } from '@/user';
 
+import { TaskEntity } from './task.entity';
+
 import { RefreshTokenEntity, FileEntity, GroupEntity } from '.';
 
 @Entity('users')
 export class UserEntity implements IUser {
+  constructor(id) {
+    this.id = id;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -43,4 +49,7 @@ export class UserEntity implements IUser {
 
   @OneToMany(() => FileEntity, file => file.user)
   files: FileEntity[];
+
+  @OneToMany(() => TaskEntity, task => task.user)
+  tasks: TaskEntity[];
 }
