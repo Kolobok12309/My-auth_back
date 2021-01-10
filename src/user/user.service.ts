@@ -4,8 +4,10 @@ import { authenticator } from 'otplib';
 import { hash } from 'bcrypt';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
 import { Repository } from 'typeorm';
 
+import { IMailingOptions } from '@/interfaces';
 import { UserEntity } from '@/entities';
 
 import { SALT_ROUNDS } from './user.consts';
@@ -19,6 +21,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
+    private readonly mailerService: MailerService,
   ) {}
 
   findAll(page: number = 1, perPage: number = 20): Promise<[UserDto[], number]> {
@@ -100,5 +103,34 @@ export class UserService {
     if (!affected) throw new NotFoundException('User not found');
 
     return true;
+  }
+
+  async mailing(id: number, {
+    template,
+    subject,
+    context = {},
+  }: IMailingOptions) {
+    const user = await this.userRepo.findOne(id, {
+      relations: ['group']
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    await this
+      .mailerService
+      .sendMail({
+        to: user.email,
+        subject,
+        template,
+        context: {
+          user,
+          ...context,
+        }
+      })
+      .catch(err => {
+        console.error(err);
+
+        throw new InternalServerErrorException('Error while user mailing');
+      });
   }
 }

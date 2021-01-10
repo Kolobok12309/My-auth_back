@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 
 import { GroupEntity } from '@/entities';
+import { IMailingOptions } from '@/interfaces';
 
-import { IMailingOptions } from './interfaces';
 import { CreateGroupDto, UpdateGroupDto, GroupDto } from './dto';
 
 @Injectable()
@@ -59,6 +59,7 @@ export class GroupService {
   async mailing(id: number, {
     template,
     subject,
+    context = {},
   }: IMailingOptions) {
     const group = await this.findOne(id);
 
@@ -72,13 +73,14 @@ export class GroupService {
           subject,
           template,
           context: {
-            user
+            user,
+            ...context,
           },
         })
         .catch(err => {
           console.error(err);
 
-          throw new InternalServerErrorException('Error while mailing');
+          throw new InternalServerErrorException('Error while group mailing');
         })
     ));
   }
