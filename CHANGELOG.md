@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.10](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.9...v0.4.10) (2021-01-12)
+
+
+### Bug Fixes
+
+* **groups:** :bug: Fix output of update endpoint ([089243d](https://github.com/Kolobok12309/My-auth_back/commit/089243d3766934070a4eb4a805c70c0425771d9f))
+
 ### [0.4.9](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.8...v0.4.9) (2021-01-12)
 
 ### [0.4.8](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.7...v0.4.8) (2021-01-12)
