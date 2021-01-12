@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { FileEntity, TaskEntity, UserEntity, GroupEntity } from '@/entities';
+import { FileEntity, TaskEntity } from '@/entities';
 
-import { CreateTaskDto, UpdateTaskDto, TaskDto } from './dto';
+import { CreateTaskDto, UpdateTaskDto } from './dto';
 
 @Injectable()
 export class TaskService {
@@ -14,19 +14,14 @@ export class TaskService {
   ) {}
 
   create(createTaskDto: CreateTaskDto, createdById: number): Promise<TaskEntity> {
-    const { fileIds, groupId, userId, ...dto } = createTaskDto;
+    const { fileIds = [], ...dto } = createTaskDto;
 
     const files = fileIds.map(id => new FileEntity(id));
-    const createdBy = new UserEntity(createdById);
-    const group = new GroupEntity(groupId);
-    const user = userId && new UserEntity(userId) || null;
 
     return this.taskRepo.save({
       ...dto,
+      createdById,
       files,
-      createdBy,
-      group,
-      user,
     });
   }
 
@@ -38,11 +33,21 @@ export class TaskService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} task`;
+    return this.taskRepo.findOne(id);
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+    const { fileIds = [], ...dto } = updateTaskDto;
+
+    const payload = {
+      id,
+      ...dto,
+    };
+
+    if (fileIds)
+      payload.files = fileIds.map(fileId => new FileEntity(fileId));
+
+    return this.taskRepo.save(payload);
   }
 
   async delete(id: number) {

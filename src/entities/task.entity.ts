@@ -28,14 +28,22 @@ export class TaskEntity implements ITask {
     eager: true,
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   group: GroupEntity;
+
+  @Column()
+  groupId: number;
 
   @ManyToOne(() => UserEntity, user => user.tasks, {
     nullable: true,
     eager: true,
     onDelete: 'SET NULL',
   })
+  @JoinColumn()
   user?: UserEntity;
+
+  @Column({ nullable: true, })
+  userId?: number;
 
   @Column({ nullable: true })
   deadline?: Date;
@@ -47,6 +55,9 @@ export class TaskEntity implements ITask {
   })
   @JoinColumn()
   createdBy?: UserEntity;
+
+  @Column({ nullable: true })
+  createdById?: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { TaskEntity } from '@/entities';
 import { PaginationDto, PaginatedDto, paginatedDtoFactory } from '@/dto';
 import { ITokenUser, User, Auth } from '@/auth';
-import { Roles } from '@/user';
+import { Roles, UserService } from '@/user';
 import { getPageCount } from '@/utils';
 
 import { TaskService } from './task.service';
@@ -13,7 +12,10 @@ import { TaskDto, CreateTaskDto, UpdateTaskDto } from './dto';
 @ApiTags('Tasks')
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
   @Auth([Roles.Admin, Roles.Director])
@@ -52,19 +54,56 @@ export class TaskController {
     return this.taskService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiParam({ name: 'id', type: Number, description: 'Id of task' })
   @ApiNotFoundResponse()
   @ApiOkResponse({ type: TaskDto })
-  update(@Param('id') id: number, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(id, updateTaskDto);
+  async update(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @Param('id') id: number,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @User() user: ITokenUser,
+  ) {
+    const isPrivilegged = user.role === Roles.Admin || user.role === Roles.Director;
+    const oldTask = await this.taskService.findOne(id);
+
+    if (!oldTask) throw new NotFoundException('Task not found');
+
+    if (!isPrivilegged) {
+      const {
+        group: { id: groupId },
+        user: taskUser,
+      } = oldTask;
+      const { groupId: userGroup } = await this.userService.findById(user.id);
+
+      if (!userGroup)
+        throw new ForbiddenException();
+      if (groupId !== userGroup)
+        throw new ForbiddenException();
+      if (taskUser && taskUser.id !== null && taskUser.id !== user.id)
+        throw new ForbiddenException();
+    }
+
+    const payload = isPrivilegged
+      ? updateTaskDto
+      : {
+        status: updateTaskDto.status
+      };
+
+    const saved = await this.taskService.update(id, payload);
+
+    return {
+      ...oldTask,
+      ...saved,
+    };
   }
 
   @Delete(':id')
   @Auth([Roles.Admin, Roles.Director])
   @ApiParam({ name: 'id', type: Number, description: 'Id of task' })
   @ApiNotFoundResponse()
+  @ApiOkResponse()
   remove(@Param('id') id: number) {
     return this.taskService.delete(id);
   }
