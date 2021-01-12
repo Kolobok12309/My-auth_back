@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.8](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.7...v0.4.8) (2021-01-12)
+
+
+### Features
+
+* :sparkles: Add edit task endpoint ([28432f6](https://github.com/Kolobok12309/My-auth_back/commit/28432f6168a18372d965e40ae06d1ebe45bd6933))
+* **task:** :sparkles: Add delete method ([de97a37](https://github.com/Kolobok12309/My-auth_back/commit/de97a37d18d0b04372882ec8bffd1d91c8ffeb01))
+* **task:** :sparkles: Add task entity and endpoint for create and getAll ([487dfff](https://github.com/Kolobok12309/My-auth_back/commit/487dfff4ce3fb587398c0627ba76d55cdf375291))
+
 ### [0.4.7](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.6...v0.4.7) (2021-01-08)
 
 
