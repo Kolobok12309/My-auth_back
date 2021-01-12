@@ -33,19 +33,24 @@ export class GroupService {
 
   findOne(id: number) {
     return this.groupRepo.findOne(id, {
-      relations: ['users'],
+      relations: ['users', 'tasks'],
     });
   }
 
-  async update(id: number, { name }: UpdateGroupDto): Promise<GroupDto> {
+  async update(id: number, updateGroupDto: UpdateGroupDto): Promise<GroupDto> {
     const oldGroup = await this.groupRepo.findOne(id);
 
     if (!oldGroup) throw new NotFoundException('Group not found');
 
-    return this.groupRepo.save({
+    const saved = await this.groupRepo.save({
       id,
-      name,
+      ...updateGroupDto,
     });
+
+    return {
+      ...oldGroup,
+      ...saved,
+    };
   }
 
   async remove(id: number) {
