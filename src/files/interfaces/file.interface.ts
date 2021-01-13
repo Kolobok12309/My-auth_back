@@ -5,5 +5,5 @@ export interface IFile {
 
   createdAt: Date;
 
-  userId: number;
+  userId?: number;
 }

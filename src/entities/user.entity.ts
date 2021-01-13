@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, Index, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
-import { Roles, IUser } from '@/user';
+import { Roles, IUser } from '@/user/interfaces';
 
 import { TaskEntity } from './task.entity';
 
@@ -34,12 +34,13 @@ export class UserEntity implements IUser {
 
   @ManyToOne(() => GroupEntity, group => group.users, {
     onDelete: 'SET NULL',
+    nullable: true,
   })
   @JoinColumn({ name: 'groupId' })
-  group: GroupEntity;
+  group?: GroupEntity;
 
   @Column({ nullable: true })
-  groupId: number | null;
+  groupId?: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -9,9 +9,13 @@ export interface IUser {
 
   username?: string;
 
+  email?: string;
+
   password?: string;
 
   role?: Roles;
+
+  groupId?: number;
 
   createdAt?: Date;
 }

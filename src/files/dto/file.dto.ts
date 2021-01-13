@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { UserDto } from '@/user';
+
 import { IFile } from '../interfaces';
 
 export class FileDto implements IFile {
@@ -12,6 +14,9 @@ export class FileDto implements IFile {
   @ApiProperty()
   createdAt: Date;
 
-  @ApiProperty()
-  userId: number;
+  @ApiProperty({ required: false, type: UserDto })
+  user?: UserDto;
+
+  @ApiProperty({ required: false })
+  userId?: number;
 }

@@ -19,12 +19,15 @@ export class FileEntity implements IFile {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  userId: number;
+  @Column({ nullable: true })
+  userId?: number;
 
-  @ManyToOne(() => UserEntity, user => user.files)
+  @ManyToOne(() => UserEntity, user => user.files, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user?: UserEntity;
 
   @ManyToOne(() => TaskEntity, task => task.files, {
     nullable: true,
