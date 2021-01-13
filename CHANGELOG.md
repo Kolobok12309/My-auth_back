@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.11](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.10...v0.4.11) (2021-01-13)
+
+
+### Features
+
+* **task:** :sparkles: Email notifications for create/update task ([6bade7d](https://github.com/Kolobok12309/My-auth_back/commit/6bade7d57b63b0ce3df4479d37aa2ea69210eebb))
+
 ### [0.4.10](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.9...v0.4.10) (2021-01-12)
 
 
