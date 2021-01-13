@@ -1,0 +1,15 @@
+<h1>
+  Обновлена задача: "{{ task.title }}"# {{ task.id }}
+</h1>
+
+<div>
+  <p>
+    Описание: {{ task.description }}
+  </p>
+
+  {{#if task.deadline}}
+  <p>
+    Срок сдачи: {{ task.deadline }}
+  </p>
+  {{/if}}
+</div>

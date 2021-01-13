@@ -1,0 +1,23 @@
+<h1>
+  Создана новая задача: "{{ task.title }}"# {{task.id}}
+</h1>
+
+<div>
+  <p>
+    Описание: {{ task.description }}
+  </p>
+
+  {{#if task.deadline}}
+  <p>
+    Срок сдачи: {{ task.deadline }}
+  </p>
+  {{/if}}
+</div>
+
+<br>
+
+<footer>
+  Создал: <b>{{ task.createdBy.username }}#{{ task.createdBy.id }}</b>
+  <br>
+  Дата создания: <b>{{ task.createdAt }}</b>
+</footer>

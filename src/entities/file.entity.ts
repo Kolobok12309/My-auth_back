@@ -24,6 +24,7 @@ export class FileEntity implements IFile {
 
   @ManyToOne(() => UserEntity, user => user.files, {
     nullable: true,
+    eager: true,
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'userId' })

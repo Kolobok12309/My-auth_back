@@ -1,14 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
 import { IsString, MinLength, IsNumber, IsOptional, Min, Max, IsDateString, IsArray, IsObject } from 'class-validator';
 
-import { ITask, TaskStatus } from '../interfaces';
+import { TaskStatus } from '../interfaces';
 
-export class CreateTaskDto implements ITask {
-  @Exclude()
-  @IsNumber()
-  id;
-
+export class CreateTaskDto {
   @IsString()
   @MinLength(10)
   @ApiProperty({
@@ -23,13 +18,10 @@ export class CreateTaskDto implements ITask {
   })
   description: string;
 
-  @Exclude()
   @IsArray()
-  files;
-
-  @IsArray()
+  @IsOptional()
   @IsNumber({}, { each: true })
-  @ApiProperty({ type: [Number] })
+  @ApiProperty({ type: [Number], default: [], required: false })
   fileIds: number[];
 
   @IsNumber()
@@ -43,17 +35,9 @@ export class CreateTaskDto implements ITask {
   })
   status: TaskStatus;
 
-  @Exclude()
-  @IsObject()
-  group;
-
   @IsNumber()
   @ApiProperty()
   groupId: number;
-
-  @Exclude()
-  @IsObject()
-  user;
 
   @IsOptional()
   @IsNumber()
@@ -64,12 +48,4 @@ export class CreateTaskDto implements ITask {
   @IsOptional()
   @ApiProperty({ required: false })
   deadline?: Date;
-
-  @Exclude()
-  @IsDateString()
-  createdBy;
-
-  @Exclude()
-  @IsDateString()
-  createdAt;
 }

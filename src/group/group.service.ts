@@ -31,9 +31,9 @@ export class GroupService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: number, relations = ['users', 'tasks']) {
     return this.groupRepo.findOne(id, {
-      relations: ['users', 'tasks'],
+      relations,
     });
   }
 

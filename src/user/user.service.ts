@@ -47,9 +47,9 @@ export class UserService {
     }));
   }
 
-  async findById(id: number): Promise<UserDto> {
+  async findById(id: number, relations = ['tokens', 'group']): Promise<UserDto> {
     return this.userRepo.findOne(id, {
-      relations: ['tokens', 'group'],
+      relations,
     });
   }
 
@@ -110,9 +110,7 @@ export class UserService {
     subject,
     context = {},
   }: IMailingOptions) {
-    const user = await this.userRepo.findOne(id, {
-      relations: ['group']
-    });
+    const user = await this.userRepo.findOne(id);
 
     if (!user) throw new NotFoundException('User not found');
 

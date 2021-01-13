@@ -13,16 +13,18 @@ export class TaskService {
     private readonly taskRepo: Repository<TaskEntity>,
   ) {}
 
-  create(createTaskDto: CreateTaskDto, createdById: number): Promise<TaskEntity> {
+  async create(createTaskDto: CreateTaskDto, createdById: number): Promise<TaskEntity> {
     const { fileIds = [], ...dto } = createTaskDto;
 
     const files = fileIds.map(id => new FileEntity(id));
 
-    return this.taskRepo.save({
+    const { id } = await this.taskRepo.save({
       ...dto,
       createdById,
       files,
     });
+
+    return this.taskRepo.findOne(id);
   }
 
   findAll(page: number = 1, perPage: number = 20): Promise<[TaskEntity[], number]> {
@@ -39,7 +41,7 @@ export class TaskService {
   update(id: number, updateTaskDto: UpdateTaskDto) {
     const { fileIds = [], ...dto } = updateTaskDto;
 
-    const payload = {
+    const payload: Partial<TaskEntity> = {
       id,
       ...dto,
     };
