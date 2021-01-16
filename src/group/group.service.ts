@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 import { GroupEntity } from '@/entities';
 import { IMailingOptions } from '@/interfaces';
@@ -14,6 +15,7 @@ export class GroupService {
     @InjectRepository(GroupEntity)
     private readonly groupRepo: Repository<GroupEntity>,
     private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
   ) {}
 
   create({ name }: CreateGroupDto) {
@@ -69,6 +71,8 @@ export class GroupService {
     const group = await this.findOne(id);
 
     if (!group) throw new NotFoundException('Group not found');
+
+    if (this.configService.get('MAIL', 'true') === 'false') return;
 
     await Promise.all(group.users.map(user =>
       this

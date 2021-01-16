@@ -6,6 +6,7 @@ import { Injectable, NotFoundException, InternalServerErrorException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Repository } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 import { IMailingOptions } from '@/interfaces';
 import { UserEntity } from '@/entities';
@@ -22,6 +23,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
     private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
   ) {}
 
   findAll(page: number = 1, perPage: number = 20): Promise<[UserDto[], number]> {
@@ -113,6 +115,8 @@ export class UserService {
     const user = await this.userRepo.findOne(id);
 
     if (!user) throw new NotFoundException('User not found');
+
+    if (this.configService.get('MAIL', 'true') === 'false') return;
 
     await this
       .mailerService
