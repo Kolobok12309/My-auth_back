@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { UserDto } from '@/user';
+import { UserDto } from '@/user/dto';
 
 import { IGroup } from '../interfaces';
 
@@ -11,6 +11,6 @@ export class GroupDto implements IGroup {
   @ApiProperty()
   name: string;
 
-  @ApiProperty({ type: [UserDto] })
+  @ApiProperty()
   users: UserDto[];
 }

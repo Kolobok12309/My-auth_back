@@ -12,7 +12,7 @@ import { UserEntity } from '@/entities';
 
 import { SALT_ROUNDS } from './user.consts';
 import { ICreateUser, IUpdateUser, Roles } from './interfaces';
-import { OtpUserDto, UserDto } from './dto';
+import { UserDto } from './dto';
 
 const asyncHash = promisify(hash);
 
@@ -63,25 +63,25 @@ export class UserService {
     });
   }
 
-  async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<OtpUserDto> {
+  async create({ email, username, password, role = Roles.User }: ICreateUser): Promise<UserDto> {
     const hashedPass = await asyncHash(password, SALT_ROUNDS);
-    const otpSecret = authenticator.generateSecret();
+    // const otpSecret = authenticator.generateSecret();
 
     const { generatedMaps } = await this.userRepo.insert({
       username,
       role,
       email,
       password: hashedPass,
-      otp: otpSecret,
+      // otp: otpSecret,
     });
 
     return {
       username,
       role,
       email,
-      otp: otpSecret,
+      // otp: otpSecret,
       ...generatedMaps[0],
-    } as OtpUserDto;
+    } as UserDto;
   }
 
   async edit(id: number, { email, role, groupId }: IUpdateUser): Promise<UserDto> {

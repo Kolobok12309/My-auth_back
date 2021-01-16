@@ -26,8 +26,8 @@ export class UserEntity implements IUser {
   @Column({ select: false })
   password: string;
 
-  @Column({ select: false })
-  otp: string;
+  @Column({ select: false, nullable: true })
+  otp?: string;
 
   @Column({ default: Roles.User, type: 'integer' })
   role: Roles;

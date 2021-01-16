@@ -1,11 +1,7 @@
 import {MigrationInterface, QueryRunner} from 'typeorm';
 
-const otpSecret = 'HJ2AAQTQEQYUU7DP';
-
 const users = [
   { name: 'admin', role: 0, },
-  { name: 'director', role: 1 },
-  { name: 'user', role: 2 },
 ];
 
 // 1234567890
@@ -17,7 +13,7 @@ export class DefaultUsers1584599219580 implements MigrationInterface {
     await users.reduce(async (acc, { name, role }) => {
       await acc;
 
-      return queryRunner.query(`INSERT INTO "users" (username, email, password, role, otp) VALUES ('${name}', '${name}@example.com', '${simplePass}', ${role}, '${otpSecret}')`, undefined);
+      return queryRunner.query(`INSERT INTO "users" (username, email, password, role) VALUES ('${name}', '${name}@example.com', '${simplePass}', ${role})`, undefined);
     }, Promise.resolve());
   }
 
