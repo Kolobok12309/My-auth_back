@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.15](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.14...v0.4.15) (2021-01-16)
+
+
+### Features
+
+* **mail:** :sparkles: Add env MAIL for disabling mailing ([f9650a0](https://github.com/Kolobok12309/My-auth_back/commit/f9650a0fe37d2508b7b9cbc4a1cd14917a6944f5))
+
 ### [0.4.14](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.13...v0.4.14) (2021-01-16)
 
 
