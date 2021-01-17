@@ -18,6 +18,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(cookieParser());
 
+  app.enableCors({
+    origin: '*',
+  });
+
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useGlobalFilters(new AllTypeormExceptionsFilter(httpAdapter));
