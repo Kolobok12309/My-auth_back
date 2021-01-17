@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.16](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.15...v0.4.16) (2021-01-17)
+
+
+### Features
+
+* :ambulance: Add wildcarded cors origin ([41c469f](https://github.com/Kolobok12309/My-auth_back/commit/41c469fcfe52204b08373a0dddcef081b9d2fa13))
+
 ### [0.4.15](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.14...v0.4.15) (2021-01-16)
 
 
