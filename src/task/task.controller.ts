@@ -1,14 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags, } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
-import { PaginationDto, PaginatedDto, paginatedDtoFactory } from '@/dto';
+import { Not } from 'typeorm';
+
+import { PaginatedDto, paginatedDtoFactory } from '@/dto';
 import { ITokenUser, User, Auth } from '@/auth';
 import { Roles, UserService } from '@/user';
 import { GroupService } from '@/group';
 import { getPageCount } from '@/utils';
 
 import { TaskService } from './task.service';
-import { TaskDto, CreateTaskDto, UpdateTaskDto } from './dto';
+import { TaskDto, CreateTaskDto, UpdateTaskDto, SearchDto } from './dto';
+import { TaskStatus } from './interfaces';
 
 @ApiTags('Tasks')
 @Controller('task')
@@ -66,8 +69,18 @@ export class TaskController {
   @Get()
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ type: paginatedDtoFactory(TaskDto) })
-  async findAll(@Query() { page = 1, perPage = 20 }: PaginationDto): Promise<PaginatedDto<TaskDto>> {
-    const [tasks, totalCount] = await this.taskService.findAll(page, perPage);
+  async findAll(@Query() {
+    page = 1,
+    perPage = 20,
+    status = Not(TaskStatus.Done),
+    groupId,
+    userId,
+  }: SearchDto): Promise<PaginatedDto<TaskDto>> {
+    const [tasks, totalCount] = await this.taskService.findAll(page, perPage, {
+      status,
+      groupId,
+      userId,
+    });
 
     return {
       items: tasks,

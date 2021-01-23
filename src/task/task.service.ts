@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { FileEntity, TaskEntity } from '@/entities';
 
-import { CreateTaskDto, UpdateTaskDto } from './dto';
+import { CreateTaskDto, FilterDto, UpdateTaskDto } from './dto';
 
 @Injectable()
 export class TaskService {
@@ -27,10 +27,20 @@ export class TaskService {
     return this.taskRepo.findOne(id);
   }
 
-  findAll(page: number = 1, perPage: number = 20): Promise<[TaskEntity[], number]> {
+  findAll(
+    page: number = 1,
+    perPage: number = 20,
+    { status, userId, groupId }: FilterDto = {},
+  ): Promise<[TaskEntity[], number]> {
+
     return this.taskRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),
+      where: {
+        status,
+        ...userId && {userId},
+        ...groupId && {groupId},
+      },
     });
   }
 
