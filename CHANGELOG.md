@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.17](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.16...v0.4.17) (2021-01-27)
+
+
+### Features
+
+* :sparkles: Advanced filter for tasks ([63dbb8a](https://github.com/Kolobok12309/My-auth_back/commit/63dbb8a4015e017a0610fce882a5e3dc1af80d26))
+
+
+### Bug Fixes
+
+* :bug: Fix signOut and add token extractor from bearer ([7b4459b](https://github.com/Kolobok12309/My-auth_back/commit/7b4459b999dd859235927010338962c7b58525df))
+
 ### [0.4.16](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.15...v0.4.16) (2021-01-17)
 
 
