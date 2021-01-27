@@ -59,6 +59,12 @@ export class TokenService {
     return this.tokenRepo.delete(id);
   }
 
+  extractTokenFromBearer(bearer: string) {
+    const [, token] = bearer.split(' ');
+
+    return token;
+  }
+
   extractIdFromToken(token: string): number | null {
     const decoded = this.jwtService.decode(token);
 

@@ -82,7 +82,8 @@ export class AuthController {
   @Post('signOut')
   @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'User logged out' })
-  async logout(@Headers('Authorization') accessToken: string) {
+  async logout(@Headers('Authorization') bearer: string) {
+    const accessToken = this.tokenService.extractTokenFromBearer(bearer);
     const refreshId = this.tokenService.extractIdFromToken(accessToken);
 
     await this.tokenService.revokeRefreshToken(refreshId);
