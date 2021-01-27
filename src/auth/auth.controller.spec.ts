@@ -46,6 +46,7 @@ describe('AuthController', () => {
           useValue: {
             createRefreshToken: jest.fn().mockResolvedValue({ id: 5 }),
             signTokens: jest.fn().mockResolvedValue(testTokens),
+            extractTokenFromBearer: jest.fn(v => v),
             extractIdFromToken: jest.fn().mockReturnValue(10),
             revokeRefreshToken: jest.fn(),
             isRefreshTokenRevoked: jest.fn().mockResolvedValue(false),
