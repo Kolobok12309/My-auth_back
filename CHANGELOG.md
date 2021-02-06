@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.18](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.17...v0.4.18) (2021-02-06)
+
+
+### Features
+
+* **groups:** :sparkles: Add search/autocomplete endpoint ([cc5a85b](https://github.com/Kolobok12309/My-auth_back/commit/cc5a85bfc164423901011a6991d7733de9bed2f8))
+* **user:** :sparkles: Add search/autocomplete endpoint ([6f0ec6d](https://github.com/Kolobok12309/My-auth_back/commit/6f0ec6df6b3f964a2ef5af23268c6c3c94879b7d))
+* :art: Add default sorting for all entities ([3ff29f8](https://github.com/Kolobok12309/My-auth_back/commit/3ff29f89f5f7bbfa2a59c60631f2e4b3029c8e4e))
+
 ### [0.4.17](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.16...v0.4.17) (2021-01-27)
 
 
