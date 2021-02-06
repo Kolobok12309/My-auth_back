@@ -12,7 +12,8 @@ services:
       - 5432:5432
 
   app:
-    image: kolobok12309/my-auth_back
+    build:
+      context: ./
     environment:
       DB_HOST: db
       HOST: 0.0.0.0
