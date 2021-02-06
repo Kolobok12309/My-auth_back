@@ -72,11 +72,13 @@ export class TaskController {
   async findAll(@Query() {
     page = 1,
     perPage = 20,
+    title = '',
     status = Not(TaskStatus.Done),
     groupId,
     userId,
   }: SearchDto): Promise<PaginatedDto<TaskDto>> {
     const [tasks, totalCount] = await this.taskService.findAll(page, perPage, {
+      title,
       status,
       groupId,
       userId,

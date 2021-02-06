@@ -13,6 +13,7 @@ import {
   UserDto,
   UpdateUserDto,
   SearchUserDto,
+  PaginatedFilterUserDto,
 } from './dto';
 import { Roles } from './interfaces';
 
@@ -22,9 +23,22 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ type: paginatedDtoFactory(UserDto) })
-  async getAll(@Query() { page = 1, perPage = 20 }: PaginationDto): Promise<PaginatedDto<UserDto>> {
-    const [users, totalCount] = await this.userService.findAll(page, perPage);
+  async getAll(@Query() {
+    page = 1,
+    perPage = 20,
+    username,
+    email,
+    role,
+    groupId,
+  }: PaginatedFilterUserDto): Promise<PaginatedDto<UserDto>> {
+    const [users, totalCount] = await this.userService.findAll(page, perPage, {
+      username,
+      email,
+      role,
+      groupId,
+    });
 
     return {
       items: users,

@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 
 import { FileEntity, TaskEntity } from '@/entities';
+import { escapeLike } from '@/utils';
 
 import { CreateTaskDto, FilterDto, UpdateTaskDto } from './dto';
 
@@ -30,7 +31,7 @@ export class TaskService {
   findAll(
     page: number = 1,
     perPage: number = 20,
-    { status, userId, groupId }: FilterDto = {},
+    { title, status, userId, groupId }: FilterDto = {},
   ): Promise<[TaskEntity[], number]> {
 
     return this.taskRepo.findAndCount({
@@ -40,6 +41,7 @@ export class TaskService {
         status,
         ...userId && {userId},
         ...groupId && {groupId},
+        ...title && {title: ILike(`%${escapeLike(title)}%`)}
       },
     });
   }

@@ -14,7 +14,7 @@ import { escapeLike } from '@/utils';
 
 import { SALT_ROUNDS } from './user.consts';
 import { ICreateUser, IUpdateUser, Roles } from './interfaces';
-import { UserDto, SearchUserDto } from './dto';
+import { UserDto, SearchUserDto, FilterUserDto } from './dto';
 
 const asyncHash = promisify(hash);
 
@@ -37,10 +37,23 @@ export class UserService {
     });
   }
 
-  findAll(page: number = 1, perPage: number = 20): Promise<[UserDto[], number]> {
+  findAll(page: number = 1, perPage: number = 20, {
+    username,
+    email,
+    role,
+    groupId,
+  }: FilterUserDto): Promise<[UserDto[], number]> {
+    console.log(role);
+
     return this.userRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),
+      where: {
+        ...username && {username: ILike(`%${escapeLike(username)}%`)},
+        ...email && {email: ILike(`%${escapeLike(email)}%`)},
+        ...(typeof role === 'number') && {role},
+        ...groupId && {groupId},
+      },
     });
   }
 

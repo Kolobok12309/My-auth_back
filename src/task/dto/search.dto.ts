@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { IsOptional, IsNumberString } from 'class-validator';
+import { IsOptional, IsNumberString, IsString } from 'class-validator';
 import { FindOperator } from 'typeorm';
 
 import { PaginationDto } from '@/dto';
@@ -8,6 +8,11 @@ import { PaginationDto } from '@/dto';
 import { TaskStatus } from '../interfaces';
 
 export class FilterDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ required: false })
+  title?: string;
+
   @IsOptional()
   @IsNumberString()
   @ApiProperty({

@@ -4,3 +4,4 @@ export * from './user.dto';
 export * from './updateUser.dto';
 export * from './otpUser.dto';
 export * from './search.dto';
+export * from './filter.dto';
