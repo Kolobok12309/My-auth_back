@@ -5,15 +5,16 @@ import { hash } from 'bcrypt';
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import { IMailingOptions } from '@/interfaces';
 import { UserEntity } from '@/entities';
+import { escapeLike } from '@/utils';
 
 import { SALT_ROUNDS } from './user.consts';
 import { ICreateUser, IUpdateUser, Roles } from './interfaces';
-import { UserDto } from './dto';
+import { UserDto, SearchUserDto } from './dto';
 
 const asyncHash = promisify(hash);
 
@@ -25,6 +26,16 @@ export class UserService {
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
   ) {}
+
+  search(text: string = ''): Promise<SearchUserDto[]> {
+    return this.userRepo.find({
+      take: 10,
+      select: ['id', 'username'],
+      where: {
+        ...text && {username: ILike(`%${escapeLike(text)}%`)},
+      }
+    });
+  }
 
   findAll(page: number = 1, perPage: number = 20): Promise<[UserDto[], number]> {
     return this.userRepo.findAndCount({
