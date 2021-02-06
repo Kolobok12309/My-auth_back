@@ -1,13 +1,14 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 import { GroupEntity } from '@/entities';
 import { IMailingOptions } from '@/interfaces';
+import { escapeLike } from '@/utils';
 
-import { CreateGroupDto, UpdateGroupDto, GroupDto } from './dto';
+import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto } from './dto';
 
 @Injectable()
 export class GroupService {
@@ -24,6 +25,16 @@ export class GroupService {
     });
 
     return this.groupRepo.save(rawGroup);
+  }
+
+  search(text: string = ''): Promise<SearchGroupDto[]> {
+    return this.groupRepo.find({
+      take: 10,
+      select: ['id', 'name'],
+      where: {
+        ...text && {name: ILike(`%${escapeLike(text)}%`)},
+      }
+    });
   }
 
   findAll(page: number = 1, perPage: number = 20): Promise<[GroupDto[], number]> {

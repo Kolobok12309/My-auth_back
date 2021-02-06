@@ -1,5 +1,5 @@
 import { Controller, Query, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Auth, User, ITokenUser } from '@/auth';
 import { Roles } from '@/user';
@@ -7,7 +7,7 @@ import { PaginationDto, PaginatedDto, paginatedDtoFactory } from '@/dto';
 import { getPageCount } from '@/utils';
 
 import { GroupService } from './group.service';
-import { CreateGroupDto, UpdateGroupDto, GroupDto } from './dto';
+import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto } from './dto';
 
 @ApiTags('Group')
 @Controller('group')
@@ -36,6 +36,12 @@ export class GroupController {
         pageCount: getPageCount(totalCount, perPage),
       }
     };
+  }
+
+  @Get('search')
+  @ApiOkResponse({ type: SearchGroupDto, isArray: true })
+  search(@Query('text') text: string = ''): Promise<SearchGroupDto[]> {
+    return this.groupService.search(text);
   }
 
   @Get(':id')
