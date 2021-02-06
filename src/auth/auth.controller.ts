@@ -144,6 +144,13 @@ export class AuthController {
     return this.tokenService.getUserTokens(id);
   }
 
+  @Get('/tokens/:userId')
+  @Auth([Roles.Admin])
+  @ApiOkResponse({ description: 'List of user active tokens' })
+  getUserTokens(@Param('userId') userId: number) {
+    return this.tokenService.getUserTokens(userId);
+  }
+
   @Delete('/tokens/:id')
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ description: 'Token successfully revoked' })

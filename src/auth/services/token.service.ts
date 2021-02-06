@@ -116,10 +116,10 @@ export class TokenService {
     return !foundToken;
   }
 
-  getUserTokens(id: number) {
+  getUserTokens(userId: number) {
     return this.tokenRepo.find({
       where: {
-        userId: id,
+        userId,
       },
       select: ['id', 'userAgent', 'createdAt', 'ip'],
     });
