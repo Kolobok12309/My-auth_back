@@ -2,7 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDa
 
 import { UserEntity } from '.';
 
-@Entity('refresh-tokens')
+@Entity('refresh-tokens', {
+  orderBy: {
+    createdAt: 'DESC',
+  },
+})
 export class RefreshTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;

@@ -6,7 +6,12 @@ import { TaskEntity } from './task.entity';
 
 import { RefreshTokenEntity, FileEntity, GroupEntity } from '.';
 
-@Entity('users')
+@Entity('users', {
+  orderBy: {
+    createdAt: 'DESC',
+    username: 'ASC',
+  },
+})
 export class UserEntity implements IUser {
   constructor(id) {
     this.id = id;

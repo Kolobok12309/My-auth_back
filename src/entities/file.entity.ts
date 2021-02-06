@@ -4,7 +4,11 @@ import { IFile } from '@/files/interfaces';
 
 import { UserEntity, TaskEntity } from '.';
 
-@Entity('files')
+@Entity('files', {
+  orderBy: {
+    createdAt: 'DESC',
+  },
+})
 export class FileEntity implements IFile {
   constructor(id) {
     this.id = id;

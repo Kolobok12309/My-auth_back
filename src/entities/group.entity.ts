@@ -5,7 +5,11 @@ import { IGroup } from '@/group/interfaces';
 
 import { UserEntity, TaskEntity } from '.';
 
-@Entity('groups')
+@Entity('groups', {
+  orderBy: {
+    id: 'DESC',
+  }
+})
 export class GroupEntity implements IGroup {
   constructor(id) {
     this.id = id;

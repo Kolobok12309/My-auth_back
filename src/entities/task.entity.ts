@@ -4,7 +4,12 @@ import { ITask, TaskStatus } from '@/task/interfaces';
 
 import { UserEntity, FileEntity, GroupEntity } from '.';
 
-@Entity('tasks')
+@Entity('tasks', {
+  orderBy: {
+    createdAt: 'DESC',
+    title: 'ASC',
+  }
+})
 export class TaskEntity implements ITask {
   @PrimaryGeneratedColumn()
   id: number;
