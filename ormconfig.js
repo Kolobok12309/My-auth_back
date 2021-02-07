@@ -13,8 +13,8 @@ const connectionOptions = {
   ssl: getEnv('DB_SSL', false) === 'true',
   dropSchema: false,
   logging: true,
-  entities: [isProd ? 'dist/entities/*.entity.js' : 'src/entities/*.entity.ts'],
-  subscribers: [isProd ? 'dist/subsribers/**/*.js' : 'src/subscribers/**/*.ts'],
+  entities: [isProd ? 'dist/src/entities/*.entity.js' : 'src/entities/*.entity.ts'],
+  subscribers: [isProd ? 'dist/src/subsribers/**/*.js' : 'src/subscribers/**/*.ts'],
 };
 
 let mainConfig;
