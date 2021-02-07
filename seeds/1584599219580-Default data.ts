@@ -1,7 +1,6 @@
 import {MigrationInterface, QueryRunner} from 'typeorm';
 
-import { GroupEntity } from '~/src/entities/group.entity';
-import { UserEntity } from '~/src/entities/user.entity';
+import { GroupEntity, UserEntity } from '~/src/entities';
 import { Roles } from '~/src/user/interfaces';
 import { TaskStatus } from '~/src/task/interfaces';
 

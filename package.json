@@ -27,7 +27,7 @@
     "seed:create": "yarn run typeorm migration:create -c seed -n",
     "seed:run": "yarn run typeorm migration:run -c seed",
     "seed:revert": "yarn run typeorm migration:revert -c seed",
-    "migrations:run": "yarn migration:run && yarn seed:run",
+    "migrations:run": "yarn run migration:run && yarn run seed:run",
     "migrations:prod": "yarn run typeorm migration:run && yarn run typeorm migration:run -c seed",
     "release": "standard-version",
     "release:patch": "yarn run release -- --release-as patch",
