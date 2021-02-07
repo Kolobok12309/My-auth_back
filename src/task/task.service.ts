@@ -38,7 +38,7 @@ export class TaskService {
       take: perPage,
       skip: perPage * (page - 1),
       where: {
-        status,
+        ...(status !== undefined) && {status},
         ...userId && {userId},
         ...groupId && {groupId},
         ...title && {title: ILike(`%${escapeLike(title)}%`)}

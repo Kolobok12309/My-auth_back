@@ -72,7 +72,7 @@ export class TaskController {
   async findAll(@Query() {
     page = 1,
     perPage = 20,
-    title = '',
+    title,
     status = Not(TaskStatus.Done),
     groupId,
     userId,
