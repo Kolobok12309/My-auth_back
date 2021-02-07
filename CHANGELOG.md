@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.19](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.18...v0.4.19) (2021-02-07)
+
+
+### Features
+
+* **auth:** :sparkles: Add get another user token list for admin ([7b0c709](https://github.com/Kolobok12309/My-auth_back/commit/7b0c7098fe69d99d6a5f274669cc7e2d6e769754))
+* :sparkles: Add to user and tasks getAll params ([efe88ff](https://github.com/Kolobok12309/My-auth_back/commit/efe88ff9f8d4f69c49618171e497c405731a594b))
+
+
+### Bug Fixes
+
+* :ambulance: Fix migrations:prod ([da74585](https://github.com/Kolobok12309/My-auth_back/commit/da74585ac19162a75b64603aecbcdb85506657b0))
+
 ### [0.4.18](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.17...v0.4.18) (2021-02-06)
 
 
