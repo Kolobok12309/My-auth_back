@@ -14,6 +14,7 @@ import {
   UpdateUserDto,
   SearchUserDto,
   PaginatedFilterUserDto,
+  SearchInputUserDto,
 } from './dto';
 import { Roles } from './interfaces';
 
@@ -54,8 +55,8 @@ export class UserController {
   @Get('search')
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ type: SearchUserDto, isArray: true })
-  search(@Query('text') text: string = ''): Promise<SearchUserDto[]> {
-    return this.userService.search(text);
+  search(@Query() { text, groupId }: SearchInputUserDto): Promise<SearchUserDto[]> {
+    return this.userService.search(text, { groupId });
   }
 
   @Get('self')

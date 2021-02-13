@@ -27,12 +27,13 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  search(text: string = ''): Promise<SearchUserDto[]> {
+  search(text: string = '', { groupId = null }: { groupId?: number }): Promise<SearchUserDto[]> {
     return this.userRepo.find({
       take: 10,
       select: ['id', 'username'],
       where: {
         ...text && {username: ILike(`%${escapeLike(text)}%`)},
+        ...groupId && {groupId},
       }
     });
   }
