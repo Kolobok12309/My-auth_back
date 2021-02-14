@@ -1,8 +1,8 @@
 import { promisify } from 'util';
 
 import { authenticator } from 'otplib';
-import { hash } from 'bcrypt';
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { hash, compare } from 'bcrypt';
+import { Injectable, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Repository, ILike } from 'typeorm';
@@ -14,9 +14,10 @@ import { escapeLike } from '@/utils';
 
 import { SALT_ROUNDS } from './user.consts';
 import { ICreateUser, IUpdateUser, Roles } from './interfaces';
-import { UserDto, SearchUserDto, FilterUserDto } from './dto';
+import { UserDto, SearchUserDto, FilterUserDto, UpdatePasswordDto } from './dto';
 
 const asyncHash = promisify(hash);
+const asyncCompare = promisify(compare);
 
 @Injectable()
 export class UserService {
@@ -120,6 +121,29 @@ export class UserService {
       role,
       groupId,
     });
+  }
+
+  async changePassword(id: number, needConfirmPasswords: boolean, { password, oldPassword = '' }: UpdatePasswordDto) {
+    const user = await this.userRepo.findOne(id, {
+      select: ['password'],
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    if (needConfirmPasswords) {
+      const isPasswordRight = await asyncCompare(oldPassword, user.password);
+
+      if (!isPasswordRight) throw new ConflictException('Wrong oldPassword');
+    }
+
+    const hashedPassword = await asyncHash(password, SALT_ROUNDS);
+
+    await this.userRepo.save({
+      id,
+      password: hashedPassword,
+    });
+
+    return true;
   }
 
   async delete(id: number) {

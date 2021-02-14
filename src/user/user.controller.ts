@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete, Query, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 
 import { Auth, User } from '@/auth/decorators';
 import { ITokenUser } from '@/auth/interfaces';
@@ -15,6 +15,7 @@ import {
   SearchUserDto,
   PaginatedFilterUserDto,
   SearchInputUserDto,
+  UpdatePasswordDto,
 } from './dto';
 import { Roles } from './interfaces';
 
@@ -106,6 +107,27 @@ export class UserController {
     if (!isAdmin) delete payload.role;
 
     return this.userService.edit(editId, payload);
+  }
+
+  @Patch(':id/password')
+  @Auth([Roles.User, Roles.Admin, Roles.Director])
+  @ApiParam({ name: 'id', type: Number, description: 'Id of user' })
+  @ApiOkResponse({ description: 'Password successfully changed' })
+  @ApiConflictResponse({ description: 'Wrong oldPassword' })
+  @ApiNotFoundResponse({ description: 'User not found' })
+  async updatePassword(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @Param('id') editId: number,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @User() { id, role }: ITokenUser,
+  ) {
+    const isSelfUpdate = editId === id;
+    const isAdmin = role === Roles.Admin;
+    const isOperationPermitted = isSelfUpdate || isAdmin;
+
+    if (!isOperationPermitted) throw new ForbiddenException();
+
+    return this.userService.changePassword(editId, isSelfUpdate, updatePasswordDto);
   }
 
   @Delete(':id')

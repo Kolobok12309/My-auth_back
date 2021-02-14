@@ -6,3 +6,4 @@ export * from './otpUser.dto';
 export * from './search.dto';
 export * from './filter.dto';
 export * from './searchInput.dto';
+export * from './updatePassword.dto';
