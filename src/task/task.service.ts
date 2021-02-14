@@ -50,7 +50,7 @@ export class TaskService {
     return this.taskRepo.findOne(id);
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
     const { fileIds = [], ...dto } = updateTaskDto;
 
     const payload: Partial<TaskEntity> = {
@@ -61,7 +61,9 @@ export class TaskService {
     if (fileIds)
       payload.files = fileIds.map(fileId => new FileEntity(fileId));
 
-    return this.taskRepo.save(payload);
+    await this.taskRepo.save(payload);
+
+    return this.findOne(id);
   }
 
   async delete(id: number) {

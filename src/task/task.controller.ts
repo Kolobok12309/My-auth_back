@@ -157,21 +157,16 @@ export class TaskController {
       if (!fullGroup) throw new NotFoundException('Group not found');
     }
 
-    const saved = await this.taskService.update(id, payload);
+    const updatedTask = await this.taskService.update(id, payload);
 
-    const fullUpdatedTask = {
-      ...oldTask,
-      ...saved,
-    };
-
-    const { group, user: taskUser, title } = fullUpdatedTask;
+    const { group, user: taskUser, title } = updatedTask;
 
     const mailingOptions = {
       template: 'update-task',
       subject: `Задача обновлена "${title}"#${id}`,
       context: {
         group,
-        task: fullUpdatedTask,
+        task: updatedTask,
       }
     };
 
@@ -181,7 +176,7 @@ export class TaskController {
       await this.groupService.mailing(group.id, mailingOptions);
     }
 
-    return fullUpdatedTask;
+    return updatedTask;
   }
 
   @Delete(':id')
