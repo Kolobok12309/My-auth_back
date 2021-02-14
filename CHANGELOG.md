@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.22](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.21...v0.4.22) (2021-02-14)
+
+
+### Features
+
+* :sparkles: Add filter params to getAll groups ([3009791](https://github.com/Kolobok12309/My-auth_back/commit/3009791a3f92d3c008aabcb1fc5046387b655955))
+* :zap: Update user view and group default relations ([f4d93e1](https://github.com/Kolobok12309/My-auth_back/commit/f4d93e1423a9a0cd999b756db57f8985e948297e))
+
+
+### Bug Fixes
+
+* :ambulance: Fix undefined createdAt while sql sorting ([f1bdd2c](https://github.com/Kolobok12309/My-auth_back/commit/f1bdd2c4bb6ccf581e62591cb84cbcbba1dfa43d))
+
 ### [0.4.21](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.20...v0.4.21) (2021-02-14)
 
 
