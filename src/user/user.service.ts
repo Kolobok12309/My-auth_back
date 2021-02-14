@@ -44,8 +44,6 @@ export class UserService {
     role,
     groupId,
   }: FilterUserDto): Promise<[UserDto[], number]> {
-    console.log(role);
-
     return this.userRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),

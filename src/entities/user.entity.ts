@@ -8,7 +8,7 @@ import { RefreshTokenEntity, FileEntity, GroupEntity } from '.';
 
 @Entity('users', {
   orderBy: {
-    createdAt: 'DESC',
+    id: 'DESC',
     username: 'ASC',
   },
 })
