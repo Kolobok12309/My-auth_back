@@ -39,6 +39,7 @@ export class UserEntity implements IUser {
 
   @ManyToOne(() => GroupEntity, group => group.users, {
     onDelete: 'SET NULL',
+    eager: true,
     nullable: true,
   })
   @JoinColumn({ name: 'groupId' })

@@ -44,7 +44,7 @@ export class GroupService {
     });
   }
 
-  findOne(id: number, relations = ['users', 'tasks']) {
+  findOne(id: number, relations = []) {
     return this.groupRepo.findOne(id, {
       relations,
     });
@@ -79,7 +79,7 @@ export class GroupService {
     subject,
     context = {},
   }: IMailingOptions) {
-    const group = await this.findOne(id);
+    const group = await this.findOne(id, ['users']);
 
     if (!group) throw new NotFoundException('Group not found');
 

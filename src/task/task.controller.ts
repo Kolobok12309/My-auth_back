@@ -40,7 +40,7 @@ export class TaskController {
       if (fullUser.groupId !== createTaskDto.groupId) throw new BadRequestException('User not in this group');
     }
 
-    const fullGroup = await this.groupService.findOne(createTaskDto.groupId, []);
+    const fullGroup = await this.groupService.findOne(createTaskDto.groupId);
 
     if (!fullGroup) throw new NotFoundException('Group not found');
 
@@ -152,7 +152,7 @@ export class TaskController {
     }
 
     if (payload.groupId && payload.groupId !== oldTask.groupId) {
-      const fullGroup = await this.groupService.findOne(payload.groupId, []);
+      const fullGroup = await this.groupService.findOne(payload.groupId);
 
       if (!fullGroup) throw new NotFoundException('Group not found');
     }
