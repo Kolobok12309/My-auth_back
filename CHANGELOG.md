@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.23](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.22...v0.4.23) (2021-02-14)
+
+
+### Features
+
+* :sparkles: Add ChangePassword endpoint ([7250c3a](https://github.com/Kolobok12309/My-auth_back/commit/7250c3a05bf9a126b98440a725fb5ec545dcc595))
+
 ### [0.4.22](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.21...v0.4.22) (2021-02-14)
 
 
