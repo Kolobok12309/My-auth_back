@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.20](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.19...v0.4.20) (2021-02-14)
+
+
+### Features
+
+* **user:** :sparkles: Add groupId param to user search ([2ba539d](https://github.com/Kolobok12309/My-auth_back/commit/2ba539d056e723f2ab7de290193aabd2dc175e27))
+
+
+### Bug Fixes
+
+* **task:** :bug: Fix FileView after task update ([23aa9c3](https://github.com/Kolobok12309/My-auth_back/commit/23aa9c3408bfa1d2dd01a51956d021ba0bfee46e)), closes [#12](https://github.com/Kolobok12309/My-auth_back/issues/12)
+
 ### [0.4.19](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.18...v0.4.19) (2021-02-07)
 
 
