@@ -3,11 +3,11 @@ import { ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiQu
 
 import { Auth, User, ITokenUser } from '@/auth';
 import { Roles } from '@/user';
-import { PaginationDto, PaginatedDto, paginatedDtoFactory } from '@/dto';
+import { PaginatedDto, paginatedDtoFactory } from '@/dto';
 import { getPageCount } from '@/utils';
 
 import { GroupService } from './group.service';
-import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto } from './dto';
+import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto, PaginatedFilterGroupDto } from './dto';
 
 @ApiTags('Group')
 @Controller('group')
@@ -24,8 +24,10 @@ export class GroupController {
   @Get()
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ type: paginatedDtoFactory(GroupDto) })
-  async getAll(@Query() { page = 1, perPage = 20 }: PaginationDto): Promise<PaginatedDto<GroupDto>> {
-    const [groups, totalCount] = await this.groupService.findAll(page, perPage);
+  async getAll(@Query() { page = 1, perPage = 20, name }: PaginatedFilterGroupDto): Promise<PaginatedDto<GroupDto>> {
+    const [groups, totalCount] = await this.groupService.findAll(page, perPage, {
+      name,
+    });
 
     return {
       items: groups,

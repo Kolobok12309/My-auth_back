@@ -8,7 +8,7 @@ import { GroupEntity } from '@/entities';
 import { IMailingOptions } from '@/interfaces';
 import { escapeLike } from '@/utils';
 
-import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto } from './dto';
+import { CreateGroupDto, UpdateGroupDto, GroupDto, SearchGroupDto, FilterGroupDto } from './dto';
 
 @Injectable()
 export class GroupService {
@@ -37,10 +37,15 @@ export class GroupService {
     });
   }
 
-  findAll(page: number = 1, perPage: number = 20): Promise<[GroupDto[], number]> {
+  findAll(page: number = 1, perPage: number = 20, {
+    name,
+  }: FilterGroupDto): Promise<[GroupDto[], number]> {
     return this.groupRepo.findAndCount({
       take: perPage,
       skip: perPage * (page - 1),
+      where: {
+        ...name && {name: ILike(`%${escapeLike(name)}%`)},
+      },
     });
   }
 
