@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { ITokenPayload, ITokenUser } from '../interfaces';
+import { IRefreshTokenPayload } from '../interfaces';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh') {
@@ -15,7 +15,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh'
     });
   }
 
-  async validate({ type, ...other }: ITokenPayload): Promise<ITokenUser> {
+  async validate({ type, ...other }: IRefreshTokenPayload) {
     if (type !== 'refresh') throw new UnauthorizedException();
 
     return { ...other };

@@ -4,7 +4,7 @@ import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedRes
 import { Roles, UserService, UserDto } from '@/user';
 
 import { AuthService, TokenService } from './services';
-import { ITokenUser } from './interfaces';
+import { ITokenUser, IRefreshTokenUser } from './interfaces';
 import { Auth, User } from './decorators';
 import { SignUpDto, SignInDto, SignInResultDto, RefreshDto } from './dto';
 import { JwtRefreshGuard, JwtGuard } from './guards';
@@ -101,7 +101,7 @@ export class AuthController {
   async refreshToken(
   // eslint-disable-next-line @typescript-eslint/indent
     @Body('refresh_token') token: string,
-    @User() { id, username, role }: ITokenUser,
+    @User() { id }: IRefreshTokenUser,
     @Ip() ip?: string,
     @Headers('user-agent') userAgent?: string,
   ) {
@@ -127,8 +127,8 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.tokenService.signTokens({
       id,
       tokenId: refreshTokenEntity.id,
-      username,
-      role,
+      username: userFromDb.username,
+      role: userFromDb.role,
     });
 
     return {

@@ -4,5 +4,10 @@ export interface ITokenPayload {
   id: number;
   role: Roles;
   username: string;
-  type: 'refresh' | 'access';
+  type: 'access';
+}
+
+export interface IRefreshTokenPayload {
+  id: number;
+  type: 'refresh';
 }

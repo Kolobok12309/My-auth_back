@@ -5,3 +5,7 @@ export interface ITokenUser {
   role: Roles;
   username: string;
 }
+
+export interface IRefreshTokenUser {
+  id: number;
+}

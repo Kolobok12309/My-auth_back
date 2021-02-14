@@ -137,7 +137,7 @@ describe('AuthController', () => {
       const ip = '1.2.3.4';
       const userAgent = 'My random user agent';
 
-      const result = await authController.refreshToken(fakeToken, testUser, ip, userAgent);
+      const result = await authController.refreshToken(fakeToken, { id: testUser.id }, ip, userAgent);
 
       expect(tokenService.extractIdFromToken).toBeCalledWith(fakeToken);
       expect(tokenService.isRefreshTokenRevoked).toBeCalledWith(10);
@@ -165,7 +165,7 @@ describe('AuthController', () => {
         .mockResolvedValue(true);
 
       try {
-        await authController.refreshToken('some_token', testUser);
+        await authController.refreshToken('some_token', { id: testUser.id });
       } catch (err) {
         expect(err).toBeInstanceOf(UnauthorizedException);
       }
@@ -175,7 +175,7 @@ describe('AuthController', () => {
       expect.assertions(1);
 
       try {
-        await authController.refreshToken('some_token', { id: 243, username: '', role: Roles.Admin });
+        await authController.refreshToken('some_token', { id: 243 });
       } catch (err) {
         expect(err).toBeInstanceOf(UnauthorizedException);
       }
