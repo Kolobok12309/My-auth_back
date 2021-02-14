@@ -1,5 +1,5 @@
-import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
+import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
+import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 
 import { Roles, UserService, UserDto } from '@/user';
 
@@ -155,12 +155,12 @@ export class AuthController {
   @Auth([Roles.Admin, Roles.Director, Roles.User])
   @ApiOkResponse({ description: 'Token successfully revoked' })
   @ApiNotFoundResponse()
-  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
   async revokeToken(@User() { id, role }: ITokenUser, @Param('id') tokenId: number) {
     const token = await this.tokenService.get(tokenId);
 
     if (!token) throw new NotFoundException('Token not found');
-    if (role !== Roles.Admin && token.userId !== id) throw new UnauthorizedException();
+    if (role !== Roles.Admin && token.userId !== id) throw new ForbiddenException();
 
     await this.tokenService.revokeRefreshToken(tokenId);
   }

@@ -1,5 +1,5 @@
 import { applyDecorators, UseGuards, SetMetadata } from '@nestjs/common';
-import { ApiUnauthorizedResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiUnauthorizedResponse, ApiForbiddenResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 import { Roles } from '@/user/interfaces';
 
@@ -10,5 +10,6 @@ export const Auth = (roles: Roles[]) =>
     SetMetadata('roles', roles),
     UseGuards(JwtGuard, RolesGuard),
     ApiBearerAuth(),
+    ApiForbiddenResponse({ description: 'Not enough rights' }),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   );
