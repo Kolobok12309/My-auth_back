@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.21](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.20...v0.4.21) (2021-02-14)
+
+
+### Bug Fixes
+
+* **auth:** :bug: Fix exception type ([1b49f09](https://github.com/Kolobok12309/My-auth_back/commit/1b49f0922e04ff78574f62a7a830b8247658dced))
+* **auth:** Critical fix while refresh tokens ([12e3426](https://github.com/Kolobok12309/My-auth_back/commit/12e3426e81b4a2d3c0a96baf29fb64f9c128d20f))
+
 ### [0.4.20](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.19...v0.4.20) (2021-02-14)
 
 
