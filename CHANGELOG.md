@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.24](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.23...v0.4.24) (2021-02-22)
+
+
+### Features
+
+* **auth:** :sparkles: Add password restore ([58f372c](https://github.com/Kolobok12309/My-auth_back/commit/58f372c2d36d18deb476d9143e3301271b997e07))
+
+
+### Bug Fixes
+
+* **auth:** :sparkles: Return restore code if mailing disabled ([0bd6f29](https://github.com/Kolobok12309/My-auth_back/commit/0bd6f29cc98da199a61085b243b737a35d9329d6))
+* **task:** Change minLength of title and description ([d1ed8e0](https://github.com/Kolobok12309/My-auth_back/commit/d1ed8e01bea36efc9721bc8899356737c5b0493f))
+
 ### [0.4.23](https://github.com/Kolobok12309/My-auth_back/compare/v0.4.22...v0.4.23) (2021-02-14)
 
 
