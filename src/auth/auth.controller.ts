@@ -9,6 +9,8 @@ import { Auth, User } from './decorators';
 import { SignUpDto, SignInDto, SignInResultDto, RefreshDto } from './dto';
 import { JwtRefreshGuard, JwtGuard } from './guards';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 @ApiTags('Authorization')
 @Controller()
 export class AuthController {
@@ -163,5 +165,69 @@ export class AuthController {
     if (role !== Roles.Admin && token.userId !== id) throw new ForbiddenException();
 
     await this.tokenService.revokeRefreshToken(tokenId);
+  }
+
+  @Post('restore/start')
+  @ApiCreatedResponse({
+    description: 'Restore request created',
+  })
+  @ApiNotFoundResponse()
+  async passwordRestoreStart(@Body() { login, password }: SignInDto) {
+    const user = await this.userService.findByLogin(login);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    // TODO Изменить логику генерации секретной строки
+    const { uuid } = await this.authService.createRestoreRequest(user.id, password);
+
+    await this.userService.mailing(user.id, {
+      template: 'password-restore',
+      subject: 'Восстановление пароля',
+      context: {
+        code: uuid,
+      },
+    });
+
+    if (isDev) {
+      return {
+        code: uuid,
+      };
+    }
+  }
+
+  @Post('restore/end')
+  @ApiCreatedResponse({
+    description: 'Restore request created',
+  })
+  @ApiNotFoundResponse()
+  async passwordRestoreEnd(
+  // eslint-disable-next-line @typescript-eslint/indent
+    @Body('code') code: string,
+    @Ip() ip?: string,
+    @Headers('user-agent') userAgent?: string,
+  ) {
+    const restoreRequest = await this.authService.applyRestoreRequest(code);
+
+    if (!restoreRequest) throw new NotFoundException('Restore request not found');
+
+    const { user } = restoreRequest;
+
+    const { id: tokenId } = await this.tokenService.createRefreshToken({
+      userId: user.id,
+      userAgent,
+      ip,
+    });
+
+    const { refreshToken, accessToken } = await this.tokenService.signTokens({
+      id: user.id,
+      tokenId,
+      username: user.username,
+      role: user.role,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }

@@ -7,6 +7,10 @@
     Описание: {{ task.description }}
   </p>
 
+  <a href="{{env.MAIL_FRONT_HOST}}/task/{{task.id}}">
+    Перейти к задаче
+  </a>
+
   {{#if task.deadline}}
   <p>
     Срок сдачи: {{ task.deadline }}

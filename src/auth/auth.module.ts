@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from '@/user';
-import { RefreshTokenEntity } from '@/entities';
+import { RefreshTokenEntity, RestoreRequestEntity } from '@/entities';
 
 import { AuthService, TokenService } from './services';
 import { AuthController } from './auth.controller';
@@ -16,7 +16,7 @@ import {
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([RefreshTokenEntity]),
+    TypeOrmModule.forFeature([RefreshTokenEntity, RestoreRequestEntity]),
     UserModule,
     PassportModule,
     JwtModule.registerAsync({

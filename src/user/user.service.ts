@@ -138,12 +138,16 @@ export class UserService {
 
     const hashedPassword = await asyncHash(password, SALT_ROUNDS);
 
-    await this.userRepo.save({
-      id,
-      password: hashedPassword,
-    });
+    await this.updatePassword(user.id, hashedPassword);
 
     return true;
+  }
+
+  updatePassword(userId: number, hashedPassword: string) {
+    return this.userRepo.save({
+      id: userId,
+      password: hashedPassword,
+    });
   }
 
   async delete(id: number) {
@@ -173,6 +177,7 @@ export class UserService {
         template,
         context: {
           user,
+          env: process.env,
           ...context,
         }
       })

@@ -99,6 +99,7 @@ export class GroupService {
           template,
           context: {
             user,
+            env: process.env,
             ...context,
           },
         })

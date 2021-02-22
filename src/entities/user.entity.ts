@@ -4,6 +4,8 @@ import { Roles, IUser } from '@/user/interfaces';
 
 import { TaskEntity } from './task.entity';
 
+import { RestoreRequestEntity } from './restore-request.entity';
+
 import { RefreshTokenEntity, FileEntity, GroupEntity } from '.';
 
 @Entity('users', {
@@ -59,4 +61,7 @@ export class UserEntity implements IUser {
 
   @OneToMany(() => TaskEntity, task => task.user)
   tasks: TaskEntity[];
+
+  @OneToMany(() => RestoreRequestEntity, req => req.user)
+  restoreRequests: RestoreRequestEntity[];
 }
