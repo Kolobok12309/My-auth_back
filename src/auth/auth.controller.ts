@@ -1,6 +1,8 @@
 import { Controller, Body, Post, UseGuards, UnauthorizedException, Ip, Headers, Get, Param, Delete, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiBearerAuth, ApiBody, ApiUnauthorizedResponse, ApiHeader, ApiOkResponse, ApiNotFoundResponse, ApiConflictResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 
+import { ConfigService } from '@nestjs/config';
+
 import { Roles, UserService, UserDto } from '@/user';
 
 import { AuthService, TokenService } from './services';
@@ -18,6 +20,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService
   ) {}
 
   @Post('signIn')
@@ -188,7 +191,7 @@ export class AuthController {
       },
     });
 
-    if (isDev) {
+    if (isDev || this.configService.get<string>('MAIL', 'true') === 'false') {
       return {
         code: uuid,
       };
