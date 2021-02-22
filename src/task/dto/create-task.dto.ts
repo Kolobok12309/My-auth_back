@@ -5,16 +5,16 @@ import { TaskStatus } from '../interfaces';
 
 export class CreateTaskDto {
   @IsString()
-  @MinLength(10)
+  @MinLength(5)
   @ApiProperty({
-    minLength: 10,
+    minLength: 5,
   })
   title: string;
 
   @IsString()
-  @MinLength(20)
+  @MinLength(5)
   @ApiProperty({
-    minLength: 20,
+    minLength: 5,
   })
   description: string;
 
